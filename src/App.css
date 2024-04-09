@@ -1,38 +1,132 @@
-.App {
+
+.text-box:-webkit-autofill {
+  background-color: #bbcbda;
+  color: black;
+}
+.home-content h1{
+  /* text-style:italic; */
+  font-weight:500;
+  color:wheat;
+  font-size:9em;
+  font-style: italic;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-shadow: #11bcbc;
+  text-decoration-thickness: 2px ;
+  z-index:3px;
+  shape-rendering: crispEdges;
+}
+.home-content p{
+  font-weight:700;
+  z-index:3;
+  font-size:2em;
+  font-family:'Times New Roman', Times, serif;
+  font-style: italic;
+  
+}
+@media (max-width: 768px) {
+  .home-content h1 {
+    font-size: 2rem;
+  }
+  .dis-content{
+    display:flex;
+    justify-content:none;
+  }
+}
+::-webkit-scrollbar{
+  width:6px !important;
+  height:6px !important;
+
+}
+::-webkit-scrollbar-track{
+  background:hsla(0,0%,100%,.1);
+}
+::-webkit-scrollbar-thumb{
+  background: rgba(0,0,0,0.2);
+  
+}
+
+*{
+color:#27232e;
+}
+
+.input{
+  background-color:transparent;
+  padding:1rem;
+  border:0.1rem solid #4e0edd;
+  border-radius: 0.4rem;
+  color:orange;
   text-align: center;
+  width:80%;
+  font-size:1rem;
+  margin:1rem;
+  &:focus{
+    border:0.1rem solid #997af0;
+    outline:none;
+  }
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.button{
+  background-color: #997af0;
+  color:white;
+  padding: 1rem 2rem;
+  border:none;
+  font-weight: bolder;
+  cursor:pointer;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: 0ms 0.5s ease-in-out;
+  margin:auto;
+  display:block;
+  width:50%;
+  color:whitesmoke;
+  &:hover{
+    background-color: #4e0eff;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.center{
+  text-align: center;
+  font-size: 3rem;
+  font-family:'Cambria', 'Cochin', 'Georgia', 'Times', 'Times New Roman', 'serif';
+  color:rgb(61, 136, 138);
+  margin:4px;
+  
+}
+
+.group-header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.group-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.group-info {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.group-admin {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.info-button {
+  margin-left: auto; /* Move the Info button to the right */
+}
+
+.participant-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.participant-list li {
+  margin-bottom: 5px;
 }
