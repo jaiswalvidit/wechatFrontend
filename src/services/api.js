@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const baseURL = 'https://wechatbackend-qlpp.onrender.com'; // Replace with your actual API base URL
+// const baseURL = ; // Replace with your actual API base URL
 
 export const addUser = async (data) => {
   try {
-    const response = await axios.post(`${baseURL}/users/add`, data);
+    const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/users/add`, data);
     return response.data;
   } catch (error) {
     console.error('Error adding user:', error);
@@ -14,7 +14,7 @@ export const addUser = async (data) => {
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`${baseURL}/users`);
+    const response = await axios.get(`https://wechatbackend-qlpp.onrender.com/api/users`);
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -24,7 +24,7 @@ export const getUsers = async () => {
 
 export const addChat = async (data) => {
   try {
-    const response = await axios.post(`${baseURL}/chat/add`, data);
+    const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/chat/add`, data);
     return response.data;
   } catch (error) {
     console.error('Error setting conversation:', error);
@@ -34,7 +34,7 @@ export const addChat = async (data) => {
 
 export const getChat = async (data) => {
   try {
-    const response = await axios.post(`${baseURL}/chat/get`,data);
+    const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/chat/get`,data);
     return response.data;
   } catch (error) {
     console.error('Error fetching conversation:', error);
@@ -44,7 +44,7 @@ export const getChat = async (data) => {
 
 export const newMessages=async(data)=>{
   try {
-    const response=await axios.post(`${baseURL}/message/add`,data);
+    const response=await axios.post(`https://wechatbackend-qlpp.onrender.com/api/message/add`,data);
     console.log(response,'response')
     return response.data;
   } catch (error) {
@@ -56,7 +56,7 @@ export const newMessages=async(data)=>{
 export const getMessage=async(id)=>{
   try {
     console.log('id is follows ',id);
-   let response= await axios.get(`${baseURL}/message/get/${id}`);
+   let response= await axios.get(`https://wechatbackend-qlpp.onrender.com/api/message/get/${id}`);
    console.log('response',response);
    return response.data;
   } catch (error) {
@@ -67,7 +67,7 @@ export const getMessage=async(id)=>{
 
 export const uploadFile = async (data) => {
   try {
-    const response = await axios.post(`${baseURL}/file/upload`, data);
+    const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/file/upload`, data);
     console.log(response);
     return response.data;
   } catch (error) {
@@ -78,7 +78,7 @@ export const uploadFile = async (data) => {
 
 export const createGroup=async(data)=>{
   try {
-    const response=await axios.post(`${baseURL}/group/add/`,data);
+    const response=await axios.post(`https://wechatbackend-qlpp.onrender.com/api/group/add/`,data);
     // console.log(response);
     console.log(response.data);
     return response.data;
@@ -91,7 +91,7 @@ export const createGroup=async(data)=>{
 export const getGroups=async(id)=>{
   try {
     console.log(id);
-    const response=await axios.get(`${baseURL}/group/add/${id}`);
+    const response=await axios.get(`https://wechatbackend-qlpp.onrender.com/api/group/add/${id}`);
     console.log(response);
     console.log(response.data);
     console.log(response.data.groups);
@@ -107,7 +107,7 @@ export const getGroupsById = async (groupId) => {
   console.log(groupId,'groupheader');
   try {
    
-    const response = await axios.get(`${baseURL}/group/specific/${groupId}`);
+    const response = await axios.get(`https://wechatbackend-qlpp.onrender.com/api/group/specific/${groupId}`);
     console.log(response.data,'list aare');
     return response;
   } catch (error) {
@@ -119,7 +119,7 @@ export const getGroupsById = async (groupId) => {
 export const deleteGroupUsers=async(data)=>{
   console.log(data);
   try {
-    const response=await axios.patch(`${baseURL}/group/specific/users`,data);
+    const response=await axios.patch(`https://wechatbackend-qlpp.onrender.com/api/group/specific/users`,data);
     console.log(response);
     return response.data;
   } catch (error) {
@@ -132,7 +132,7 @@ export const addMembers=async(data)=>{
   console.log('clicked');
   console.log(data);
   try {
-    const response=await axios.patch(`${baseURL}/group/specific/add`,data);
+    const response=await axios.patch(`https://wechatbackend-qlpp.onrender.com/api/group/specific/add`,data);
     console.log(response);
     return response.data;
   } catch (error) {

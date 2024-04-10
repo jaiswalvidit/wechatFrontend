@@ -43,7 +43,7 @@ export default function Messages() {
   
   const selectedChatCompare = useRef(null);
   const [isTyping,setIsTyping]=useState(false);
-  const ENDPOINT = "http://localhost:8001";
+  const ENDPOINT = "https://wechatbackend-qlpp.onrender.com:8003";
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
 
