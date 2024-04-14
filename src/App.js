@@ -6,6 +6,7 @@ import AccountProvider from './context/AccountProvider';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ChatDialog from './components/chat/ChatDialog';
+import SetAvatar from './components/SetAvatar';
 
 // Define your Google OAuth client ID
 // const clientId = "pj441595@gmail.com";
@@ -18,6 +19,7 @@ function App() {
         <Router>
 
           <Routes>
+            <Route path="/picture" element={<SetAvatar/>}/>
             <Route path="/" element={<Messenger />} />
 
 

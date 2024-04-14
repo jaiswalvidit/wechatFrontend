@@ -108,7 +108,7 @@ export default function Message({ message }) {
           {/* <div style={{align:'right'}}> */}
           <Box style={{ display: "flex", flexDirection: "column", marginRight: "8px" }}>
           <Avatar
-            src={message.senderId.picture}
+           src={`data:image/svg+xml;base64,${userDetails.picture}`}
             sx={{ width: 24, height: 24, marginRight: "8px" }}
           />
           <Title>{"You"}</Title>

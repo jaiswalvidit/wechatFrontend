@@ -59,13 +59,21 @@ export default function Header() {
   return (
     <div>
       <Component>
-        {userDetails?.picture && (
-          <CustomAvatar
-            alt={userDetails?.name}
-            src={userDetails?.picture}
-            onClick={toggleDrawer}
-          />
-        )}
+      {userDetails?.picture && (
+  <img
+    alt="User Avatar"
+    src={`data:image/svg+xml;base64,${userDetails.picture}`}
+    style={{
+      width: '40px', // Adjust the width as needed
+      height: '40px', // Adjust the height as needed
+      margin: '0 4px', // Adjust the margins as needed
+      cursor: 'pointer',
+    }}
+  />
+)}
+
+
+{/* {`data:image/svg+xml;base64,${userDetails.picture}`} */}
 
         <Wrapper>
           <GroupAddIcon onClick={handleGroupCreateOpen} />

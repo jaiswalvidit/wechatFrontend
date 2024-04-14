@@ -72,7 +72,7 @@ const Login = () => {
       const json = await response.json();
       setUserDetails(json.user);
 
-      navigate('/');
+      navigate('/picture');
     } catch (err) {
       console.error('An error occurred:', err);
       setError(err.message || 'An error occurred while logging in');

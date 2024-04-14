@@ -33,7 +33,7 @@ export default function Profile() {
     <>
       <ImageContainer>
         {userDetails?.picture && (
-          <Avatar alt="Profile Picture" src={userDetails.picture} sx={{ width: 200, height: 200 }} />
+          <Avatar alt="Profile Picture" src={`data:image/svg+xml;base64,${userDetails.picture}`} sx={{ width: 200, height: 200 }} />
         )}
       </ImageContainer>
       <BookWrapper>
