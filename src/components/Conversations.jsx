@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../context/AccountProvider";
 import { Box, CircularProgress, Typography, styled } from "@mui/material";
 import Chat from "./chat/Chat";
-import { addChat } from "../services/api";
+import { addChat, convoDetails } from "../services/api";
 
 const StyledBox = styled(Box)({
   padding: "20px",
@@ -18,13 +18,17 @@ const Conversations = ({ text }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("https://wechatbackend-qlpp.onrender.com/api/users");
-        if (!response.ok) throw new Error("Failed to fetch user data");
-        const userData = await response.json();
-        const filteredData = userData.users.filter((user) =>
-          user.name.toLowerCase().includes(text.toLowerCase())
-        );
-        setUsers(filteredData);
+        const response = await convoDetails(userDetails._id);
+
+        console.log(response.groups,'data');
+        // if (response.status!==200) throw new Error("Failed to fetch user data");
+        const userData = response.groups;
+        // const filteredData = userData.filter((group) => {
+        //   const currentUserIndex = group.users.findIndex((user) => user._id === userDetails._id);
+        //   return currentUserIndex === -1; // Return true if current user is not found in the group
+        // });
+        // );
+        setUsers(userData);
         setError(null);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -36,16 +40,13 @@ const Conversations = ({ text }) => {
 
     fetchData();
   }, [text]);
-
+console.log(users);
   const handleClick = async (user) => {
-    const users = [userDetails._id, user._id];
+    // const users = [userDetails._id, user._id];
 
-    try {
-      const conversationData = await addChat({ users });
-      setSelectedChat(conversationData.newChat);
-    } catch (error) {
-      console.error("Error handling chat:", error);
-    }
+   
+      setSelectedChat(user);
+ 
   };
 
   return (

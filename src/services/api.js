@@ -50,6 +50,7 @@ export const getChat = async (data) => {
   }
 }
 
+
 export const newMessages=async(data)=>{
   try {
     const response=await axios.post(`https://wechatbackend-qlpp.onrender.com/api/message/add`,data);
@@ -65,6 +66,19 @@ export const getMessage=async(id)=>{
   try {
     console.log('id is follows ',id);
    let response= await axios.get(`https://wechatbackend-qlpp.onrender.com/api/message/get/${id}`);
+   console.log('response',response);
+   return response.data;
+  } catch (error) {
+    console.error('Error fetching conversation:', error);
+    throw error;
+  }
+}
+
+export const convoDetails=async(id)=>{
+  console.log(id);
+  try {
+    console.log('id is follows ',id);
+   let response= await axios.get(`https://wechatbackend-qlpp.onrender.com/api/convo/${id}`);
    console.log('response',response);
    return response.data;
   } catch (error) {

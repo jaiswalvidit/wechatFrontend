@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Box, Typography, Avatar, styled } from "@mui/material";
 import { AccountContext } from "../../context/AccountProvider";
 import { format } from "./utils";
+import { otherMember } from "./chat/miscelleanous";
 
 const Component = styled(Box)({
   display: "flex",
@@ -52,18 +53,22 @@ const Name = styled(Typography)({
 });
 
 export default function Chat({ user, onClick }) {
-  const { messages, isTyping } = useContext(AccountContext);
+  const { messages, isTyping,userDetails } = useContext(AccountContext);
   console.log(messages);
+  console.log('user',user);
+  const other=otherMember(user,userDetails);
+  console.log(other);
+
   return (
     <Component onClick={onClick}>
-      <Image src={user?.picture} alt={user?.name} />
+      <Image src={`data:image/svg+xml;base64,${other.picture}`} alt={other?.name} />
       <MessageContainer>
         <Box>
-          <Name>{user.name}</Name>
+          <Name>{other.name}</Name>
           <Timestamp>{messages && format(messages.timestamp)}</Timestamp>
         </Box>
         <MessageText>
-          {messages?.text?.includes("localhost") ? "media" : messages?.text}
+          {user.messages?<>{user.messages.text} {format(user.messages.createdAt)}</>:<></>}
         </MessageText>
         {isTyping && <Typography variant="body2">Someone is typing...</Typography>}
       </MessageContainer>
