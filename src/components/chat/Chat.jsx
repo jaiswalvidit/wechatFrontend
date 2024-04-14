@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Box, Typography, Avatar, styled } from "@mui/material";
 import { AccountContext } from "../../context/AccountProvider";
 import { format } from "./utils";
@@ -51,27 +51,9 @@ const Name = styled(Typography)({
   color: "#555", // Changed name color
   fontWeight: 600,
 });
-
 export default function Chat({ user, onClick }) {
-  const { messages, isTyping, userDetails, currentMessage,setCurrentMessage, socket } = useContext(AccountContext);
+  const { messages, isTyping, userDetails, currentMessage } = useContext(AccountContext);
   const other = otherMember(user, userDetails);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("message received", (newMessageReceived) => {
-        if (newMessageReceived.messageId === user._id) {
-          // Update the current message if it matches the user's ID
-          setCurrentMessage(newMessageReceived);
-        }
-      });
-    }
-    
-    return () => {
-      if (socket) {
-        socket.off("messageReceived");
-      }
-    };
-  }, [socket]);
 
   return (
     <Component onClick={onClick}>
@@ -84,11 +66,12 @@ export default function Chat({ user, onClick }) {
           )}
         </Box>
         <MessageText>
-          {currentMessage !== undefined && currentMessage.messageId === user._id ? (
+          {/* Rendering logic for messages */}
+          {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === user._id ? (
             // Render text from currentMessage if it exists and its messageId matches user._id
             <>
-              {currentMessage.text} {format(currentMessage.createdAt)}
-            </>
+            {currentMessage.text} {format(currentMessage.createdAt)}
+          </>
           ) : (
             // Otherwise, render text from user.messages if it exists
             user.messages ? (
@@ -106,3 +89,5 @@ export default function Chat({ user, onClick }) {
     </Component>
   );
 }
+
+
