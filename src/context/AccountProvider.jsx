@@ -16,7 +16,7 @@ const AccountProvider = ({ children }) => {
   const [selectedChat,setSelectedChat]=useState();
   // const [convoChat,setConvoChat]=useState({});
   const [isGroupCreate,setIsGroupCreate]=useState(false);
- 
+  const [currentMessage,setCurrentMessage]=useState();
   return (
     <AccountContext.Provider
       value={{
@@ -39,7 +39,8 @@ const AccountProvider = ({ children }) => {
         incomingMessage,
         setIncomingMessage,
         notification,
-        setNotification
+        setNotification,currentMessage,
+        setCurrentMessage
       }}
     >
       {children}

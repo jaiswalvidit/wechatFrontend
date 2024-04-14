@@ -32,7 +32,9 @@ export default function Messages() {
     groupDetails,
     selectedChat,
     setActiveUsers,notification,
-    setNotification
+    setNotification,
+    currentMessage,
+    setCurrentMessage
   } = useContext(AccountContext);
   const [messages, setMessages] = useState([]);
   const [file, setFile] = useState(null);
@@ -170,6 +172,7 @@ console.log(notification,'llllllllllllllllllllllllll');
       try {
         const response = await newMessages(message);
         console.log(response);
+        setCurrentMessage(response.message);
         if (response) {
           socket.emit("new message", response.message);
           setMessages((prevMessages) => [...prevMessages, response.message]);
