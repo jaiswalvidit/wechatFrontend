@@ -8,6 +8,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationModal from './NotificationModal';
 import Badge from '@mui/material/Badge';
+import Profile from './Profile';
 
 const Component = styled(Box)({
   height: '10vh',
@@ -55,12 +56,17 @@ export default function Header() {
     setGroups(!groups);
     setSelectedChat();
   };
+  const handleCLick=()=>{
+    console.log('clicked');
+    <Profile/>
+    setOpenDrawer(!openDrawer);
+  }
 
   return (
     <div>
       <Component>
       {userDetails?.picture && (
-  <img
+  <CustomAvatar
     alt="User Avatar"
     src={`data:image/svg+xml;base64,${userDetails.picture}`}
     style={{
@@ -69,6 +75,7 @@ export default function Header() {
       margin: '0 4px', // Adjust the margins as needed
       cursor: 'pointer',
     }}
+    onClick={handleCLick}
   />
 )}
 
@@ -77,7 +84,7 @@ export default function Header() {
 
         <Wrapper>
           <GroupAddIcon onClick={handleGroupCreateOpen} />
-          <GroupsIcon onClick={handleGroupsListToggle} />
+          {/* <GroupsIcon onClick={handleGroupsListToggle} /> */}
           
           <Badge
   badgeContent={notification.length}

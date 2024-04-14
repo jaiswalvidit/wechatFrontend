@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import { Addpic } from '../services/api';
-import { useNavigate, Link } from 'react-router-dom';
-import AccountProvider, { AccountContext } from '../context/AccountProvider';
+import { useNavigate } from 'react-router-dom';
+import { AccountContext } from '../context/AccountProvider';
 
 const AvatarSelector = ({ onSelect }) => {
   const navigate = useNavigate();
@@ -30,24 +30,28 @@ const AvatarSelector = ({ onSelect }) => {
 
   const handleSelectAvatar = (avatar) => {
     setSelectedAvatar(avatar);
-    onSelect && onSelect(avatar); // Trigger callback if provided
+    onSelect && onSelect(avatar);
   };
-  const {userDetails,setUserDetails}=useContext(AccountContext);
+
+  const { userDetails, setUserDetails } = useContext(AccountContext);
+
   const setProfilePicture = async () => {
     if (selectedAvatar === null) {
       alert("Please select an avatar first.");
       return;
     }
     try {
-      console.log(userDetails,'users');
-      const result = await Addpic({id:userDetails._id,picture:selectedAvatar}); // Assuming Addpic is a defined async function elsewhere
-      console.log(result.user);
+      const result = await Addpic({ id: userDetails._id, picture: selectedAvatar });
       setUserDetails(result.user);
       navigate('/');
     } catch (error) {
       console.error('Error setting profile picture:', error);
     }
-  }
+  };
+
+  const handleBack = () => {
+    navigate(-1); // Navigates back to the previous page
+  };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -72,12 +76,18 @@ const AvatarSelector = ({ onSelect }) => {
             />
           ))}
         </div>
-        <button 
-          onClick={setProfilePicture} 
-          disabled={!selectedAvatar} // Disable button when no avatar is selected
+        <button
+          onClick={setProfilePicture}
+          disabled={!selectedAvatar}
           className="submit-btn"
         >
           Set as Profile Picture
+        </button>
+        <button
+          onClick={handleBack}
+          style={{ marginTop: '20px' }}
+        >
+          Go Back
         </button>
       </div>
     </div>

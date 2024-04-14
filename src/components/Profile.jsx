@@ -1,10 +1,12 @@
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, Button } from "@mui/material";
 import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import { AccountContext } from "../context/AccountProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { userDetails } = useContext(AccountContext);
+  const navigate = useNavigate(); // Hook for navigation
 
   const ImageContainer = styled(Box)({
     display: 'flex', 
@@ -28,6 +30,9 @@ export default function Profile() {
     }
   });
 
+  function handleEditProfile() {
+    navigate('/picture'); // Adjust the path as needed
+  }
 
   return (
     <>
@@ -46,6 +51,9 @@ export default function Profile() {
         <Typography>About:</Typography>
         <Typography>When opportunity gives you a chance, take it.</Typography>
       </Box>
+      <Button variant="contained" onClick={handleEditProfile} sx={{ margin: 2 }}>
+        Edit Profile
+      </Button>
     </>
   );
 }

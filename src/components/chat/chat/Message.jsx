@@ -120,7 +120,8 @@ export default function Message({ message }) {
          <Box style={{ display: "flex", alignItems: "center" }}>
   <Box style={{ display: "flex", flexDirection: "column", marginRight: "8px" }}>
     <Avatar
-      src={message.senderId.picture}
+     src={`data:image/svg+xml;base64,${message.senderId.picture}`}
+      // src={message.senderId.picture}
       sx={{ width: 24, height: 24 }}
     />
     <Title>{message.senderId.name}</Title> {/* Display name below the image */}

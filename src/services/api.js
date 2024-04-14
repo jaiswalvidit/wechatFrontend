@@ -21,7 +21,15 @@ export const getUsers = async () => {
     throw error;
   }
 }
-
+export const specificUser=async(id)=>{
+  try {
+    const response = await axios.get(`https://wechatbackend-qlpp.onrender.com/api/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error setting conversation:', error);
+    throw error;
+  }
+}
 export const addChat = async (data) => {
   try {
     const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/chat/add`, data);
