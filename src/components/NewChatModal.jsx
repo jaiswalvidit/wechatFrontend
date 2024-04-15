@@ -3,51 +3,50 @@ import { Modal, Box, Typography, Button, CircularProgress, List, ListItem, ListI
 import { AccountContext } from '../context/AccountProvider';
 import { addChat } from '../services/api';
 
-const NewChatModal = ({ open, onClose, list }) => {
+const NewChatModal = ({ open, onClose, list,setList }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [users1, setUsers1] = useState([]);
   const { userDetails } = useContext(AccountContext);
   
-  const handleCLick = (user) => {
-    console.log('clicked');
+  const handleClick = async (user) => {
+    console.log('Clicked on user:', user);
 
-    const fetchData = async () => {
+    try {
       setLoading(true);
-      try {
-        // Assuming addChat is a function that sends data to the backend to create a new chat
-        const response = await addChat({ users: [user, userDetails] });
-        if (!response.ok) throw new Error("Failed to add chat");
-        const responseData = await response.json();
-        console.log("New chat added:", responseData);
-        // Handle any further logic based on the response from the backend
-      } catch (error) {
-        console.error('Error adding chat:', error);
-        // Handle the error appropriately
-      } finally {
-        setLoading(false);
+      // Add chat logic
+      const response = await addChat({ users: [user._id, userDetails._id] });
+      console.log(response,'ww');
+      console.log(response.message,'sss');
+      if(response.message)
+      {
+
+      console.log('added');
+      setList(prevList => [...prevList, user.name]);
+      // ,ok got it_
       }
-    };
-
-    fetchData(user);
-
-  }
+      
+    } catch (error) {
+      console.error('Error adding chat:', error);
+      setError('Failed to add chat. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    console.log("Fetching data...");
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await fetch("https://wechatbackend-qlpp.onrender.com/api/users");
-        if (!response.ok) throw new Error("Failed to fetch user data");
+       
+        // if (!response.message==="successful") {
+        //   throw new Error("Failed to fetch user data");
+        // }
         const userData = await response.json();
-
-        console.log("Fetched data:", userData);
-
+        console.log('lists ar',list)
         const filteredUsers = userData.users.filter(user => !list.includes(user.name) && user.name !== userDetails.name);
-        console.log("Filtered users:", filteredUsers);
-
-        setUsers(filteredUsers);
+        setUsers1(filteredUsers);
         setError(null);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -58,13 +57,41 @@ const NewChatModal = ({ open, onClose, list }) => {
     };
 
     fetchData();
-  }, [list, userDetails]);
-
-  console.log("Users:", users);
+  }, [setList,list, userDetails]);
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ position: 'absolute',top: '50%',left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', borderRadius: 4, boxShadow: 24, p: 4 }}>
+      <Box sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        borderRadius: 4,
+        boxShadow: 24,
+        p: 4,
+        '& .user-list': {
+          maxHeight: 300,
+          overflow: 'auto',
+          margin: '0',
+          padding: '0',
+          listStyle: 'none',
+        },
+        '& .user-item': {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '8px',
+          borderBottom: '1px solid #ccc',
+        },
+        '& .user-name': {
+          flexGrow: 1,
+        },
+        '& .add-button': {
+          marginLeft: '8px',
+        },
+      }}>
         <Typography variant="h5" mb={2}>
           Start New Chat
         </Typography>
@@ -77,18 +104,22 @@ const NewChatModal = ({ open, onClose, list }) => {
             {error}
           </Typography>
         ) : (
-          <List sx={{ maxHeight: 300, overflow: 'auto' }}>
-            {users.length===0}
-            No new users found
-            {users.length>0 && users.map(user => (
-              <React.Fragment key={user._id}>
-                <ListItem button onClick={() => onClose(user)}>
-                  <ListItemText primary={user.name} />
-                </ListItem>
-                <Button onClick={handleCLick(user)}>+</Button>
-              </React.Fragment>
-            ))}
-          </List>
+          <React.Fragment>
+            {users1.length === 0 ? (
+              <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+                No new users found
+              </Typography>
+            ) : (
+              <List className="user-list">
+                {users1.map(user => (
+                  <ListItem key={user._id} className="user-item">
+                    <ListItemText primary={user.name} className="user-name" />
+                    <Button onClick={() => handleClick(user)} className="add-button">+</Button>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </React.Fragment>
         )}
         <Button variant="contained" color="primary" onClick={onClose} sx={{ mt: 2 }}>
           Close

@@ -3,7 +3,7 @@ import { AccountContext } from '../context/AccountProvider';
 import { Box, CircularProgress, Typography, styled, Button } from '@mui/material';
 import Chat from './chat/Chat';
 import { convoDetails } from '../services/api';
-import NewChatModal from './NewChatModal'; // Import the modal component
+import NewChatModal from './NewChatModal';
 
 const StyledBox = styled(Box)({
   padding: '20px',
@@ -13,32 +13,21 @@ const Conversations = ({ text }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false); // State to manage modal open/close
-  const [conversationUsers, setConversationUsers] = useState([]); // State to store user names in the conversation
+  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+  const [list, setList] = useState([]);
   const { userDetails, setSelectedChat } = useContext(AccountContext);
-  const [list, setList] = useState([]); // State to store the list of users for the modal
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
       try {
         const response = await convoDetails(userDetails._id);
         if (response.groups) {
           const userNames = response.groups
             .filter((group) => group.users.some((user) => user._id !== userDetails._id))
             .map((group) => group.users.map((user) => user.name));
-
-          const updatedList = [];
-          userNames.forEach(user => {
-            if (user[0] === userDetails.name)
-              updatedList.push(user[1]);
-            else
-              updatedList.push(user[0]);
-          });
-
-          setList(updatedList); // Update list state immutably
-          // setUsers(response.groups);
+          const updatedList = userNames.flatMap(user => user[0] === userDetails.name ? user[1] : user[0]);
+          setList(updatedList);
           const filteredUsers = response.groups.filter((group) =>
             group.users.some(
               (user) =>
@@ -47,7 +36,6 @@ const Conversations = ({ text }) => {
             )
           );
           setUsers(filteredUsers);
-          setConversationUsers(userNames.flat());
         }
         setError(null);
       } catch (error) {
@@ -57,20 +45,15 @@ const Conversations = ({ text }) => {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [text, userDetails._id]);
+  }, [text, userDetails]);
 
   const handleClick = (user) => {
     setSelectedChat(user);
   };
 
-  const handleStartNewChat = () => {
-    setIsNewChatModalOpen(true); // Open the modal when "Start New Chat" is clicked
-  };
-
-  const handleCloseNewChatModal = () => {
-    setIsNewChatModalOpen(false); // Close the modal
+  const handleNewChat = () => {
+    setIsNewChatModalOpen(!isNewChatModalOpen);
   };
 
   return (
@@ -78,11 +61,10 @@ const Conversations = ({ text }) => {
       <Typography variant="h5" component="h2" mb={2}>
         Conversations
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleStartNewChat} sx={{ mb: 2 }}>
-        Start New Chat
+      <Button variant="contained" color="primary" onClick={handleNewChat} sx={{ mb: 2 }}>
+        {isNewChatModalOpen ? "Close Modal" : "Start New Chat"}
       </Button>
-      <NewChatModal open={isNewChatModalOpen} onClose={handleCloseNewChatModal} list={list} />
-      {/* Render the modal component */}
+      <NewChatModal open={isNewChatModalOpen} onClose={handleNewChat} list={list}  setList={setList}/>
       {loading && (
         <Box display="flex" justifyContent="center" alignItems="center" height={200}>
           <CircularProgress />

@@ -130,7 +130,7 @@ const Login = () => {
               {loading ? 'Logging in...' : 'Login'}
             </button>
             <div className="center" style={{ fontSize: '1.5rem', margin: '1rem' }}>
-              Don't have an account? <Link to="/auth/signin" style={{ color: 'orange', marginLeft: '.5rem' }}>Signin</Link>
+              Don't have an account? <Link to="/auth/signin" style={{ color: 'orange', marginLeft: '.5rem' }}>Sign up</Link>
             </div>
           </div>
         </div>

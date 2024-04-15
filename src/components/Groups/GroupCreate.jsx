@@ -27,7 +27,8 @@ export default function GroupCreate() {
         console.log(filteredUserData);
         setError(null);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+
+        console.error('Error fetching user data:', error.message);
         setError('Failed to fetch user data. Please try again later.');
       } finally {
         setLoading(false);
@@ -49,14 +50,18 @@ export default function GroupCreate() {
       group: groupName,
       users: participants.map(participant => participant._id), // Extract participant IDs
       admin: userDetails._id,
+      isGroupChat:true
     };
 
     try {
       const response = await addChat(data);
+
+      console.log(response);
       if (!response) {
-        throw new Error('Failed to create group');
+        
+        throw new Error('Failed to create group',error.message);
       }
-      setSelectedChat(response.newChat);
+      // setSelectedChat(response.newChat);
       setGroupName('');
       setParticipants([]);
       setError(null);

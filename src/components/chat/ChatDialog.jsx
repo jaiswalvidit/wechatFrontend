@@ -35,7 +35,7 @@ const Right = styled(Box)({
 });
 export default function ChatDialog() {
   const {groupDetails, userDetails, setActiveUsers, socket, selectedChat,groups} = useContext(AccountContext);
-
+  console.log(selectedChat,'sssssss');
   useEffect(() => {
     if (socket && userDetails) {
       socket.emit('addUser', userDetails._id);
@@ -74,7 +74,7 @@ export default function ChatDialog() {
         <Right>
         {/* // Assuming selectedChat is defined */}
 {
- (!selectedChat || Object.keys(selectedChat).length === 0) ?
+ (!selectedChat || Object.keys(selectedChat).length === 0 || selectedChat.isGroupChat===undefined) ?
    <EmptyChat />:(
   (selectedChat.isGroupChat === false)? 
   <Chatbox />:

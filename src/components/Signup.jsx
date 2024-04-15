@@ -45,7 +45,7 @@ const Signup = () => {
     name: '',
     email: '',
     password: '',
-    picture: '', // Add picture field to state
+    // picture: '', // Add picture field to state
   });
 
   const [formError, setFormError] = useState('');
@@ -137,17 +137,6 @@ const Signup = () => {
             />
          
 
-          {/* Add picture input field */}
-         
-            <input
-              type="text"
-              className="input"
-              id="picture"
-              name="picture"
-              placeholder='Picture URL'
-              value={credentials.picture}
-              onChange={handleChange}
-            />
          
 
           <div className="text-center">
