@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { specificUser } from '../../services/api';
+import { AccountContext } from '../../context/AccountProvider';
+import { format } from '../chat/utils';
+import { Box, Typography } from '@mui/material';
 
 export default function GroupItem({ group, onClick }) {
   const handleGroupClick = () => {
@@ -7,6 +10,7 @@ export default function GroupItem({ group, onClick }) {
   };
 
   const [user, setUser] = useState(null);
+  const {currentMessage,setCurrentMessage}=useContext(AccountContext);
 
   useEffect(() => {
     const fetchUser = async (senderId) => {
@@ -42,9 +46,28 @@ export default function GroupItem({ group, onClick }) {
       </div>
       {user && (
         <div style={styles.messageContainer}>
-          <span style={styles.label}>Sender:</span> {user.name}
-          <br />
-          <span style={styles.label}>Message:</span> {group.messages.text}
+             {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === group._id ? (
+            // Render text from currentMessage if it exists and its messageId matches user._id
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="body1">
+              <strong>{currentMessage.senderId.name}:</strong> {currentMessage.text}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              {format(currentMessage.createdAt)}
+            </Typography>
+          </Box>
+          ) : (
+            // Otherwise, render text from user.messages if it exists
+            user.messages ? (
+              <>
+                {user.messages.text} {format(user.messages.createdAt)}
+              </>
+            ) : (
+              // If user.messages doesn't exist or currentMessage doesn't match, render nothing
+              <></>
+            )
+          )}
+         
         </div>
       )}
     </div>

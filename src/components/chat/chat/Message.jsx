@@ -1,11 +1,11 @@
+import { Box, Typography, Avatar, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
 import styled from "@emotion/styled";
-import { Box, Typography } from "@mui/material";
-import React, { useContext } from "react";
 import { format } from "../utils";
 import { AccountContext } from "../../../context/AccountProvider";
 import { download } from "../utils"; // Corrected import path
 import { iconPDF } from "../../../constants/data";
-import { Avatar } from "@mui/material";
+// import { Avatar } from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 
@@ -36,7 +36,7 @@ const Own = styled(Box)({
     borderLeft: "10px solid #4caf50",
   },
 });
-// console.log(message);
+
 const Wrapper = styled(Box)({
   position: "relative",
   background: "#f44336", // Red background for other user's messages
@@ -78,17 +78,19 @@ const Time = styled(Typography)({
 
 export default function Message({ message }) {
   const { userDetails } = useContext(AccountContext);
+  const [prevSender, setPrevSender] = useState(null); // State to track previous message sender
+
   const isOwnMessage = userDetails._id === message.senderId._id;
   const isFileMessage = message.type === "file";
   console.log("your message", message.senderId.name);
 
+  const Title = styled(Typography)({
+    color: "orange",
+    fontSize: "0.8rem",
+    fontFamily: "TimesNewRoman",
+    fontStyle: "inherit",
+  });
 
-  const Title=styled(Typography)({
-    color:'orange',
-    fontSize:'0.8rem',
-    fontFamily:'TimesNewRoman',
-    fontStyle:'inherit'
-  })
   return (
     <>
       {/* {message.senderId.picture} */}
@@ -106,43 +108,42 @@ export default function Message({ message }) {
             )}
           </Own>
           {/* <div style={{align:'right'}}> */}
-          <Box style={{ display: "flex", flexDirection: "column", marginRight: "8px" }}>
-          <Avatar
-           src={`data:image/svg+xml;base64,${userDetails.picture}`}
-            sx={{ width: 24, height: 24, marginRight: "8px" }}
-          />
-          <Title>{"You"}</Title>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginRight: "8px",
+            }}
+          >
+            {prevSender !== userDetails._id && ( // Only display Avatar if the previous sender is different
+              <Avatar
+                src={`data:image/svg+xml;base64,${userDetails.picture}`}
+                sx={{ width: 24, height: 24, marginRight: "8px" }}
+              />
+            )}
+            <Title>{"You"}</Title>
           </Box>
         </Box>
       ) : (
         // </>
         <>
-         <Box style={{ display: "flex", alignItems: "center" }}>
-  <Box style={{ display: "flex", flexDirection: "column", marginRight: "8px" }}>
-    <Avatar
-     src={`data:image/svg+xml;base64,${message.senderId.picture}`}
-      // src={message.senderId.picture}
-      sx={{ width: 24, height: 24 }}
-    />
-    <Title>{message.senderId.name}</Title> {/* Display name below the image */}
-  </Box>
+          <Box style={{ display: "flex", alignItems: "center" }}>
+           
 
-  <Wrapper>
-    {isFileMessage ? (
-      <Imagemessage message={message} />
-    ) : (
-      <>
-        
-          <Text>{message.text}</Text>
-          <Time>{format(message.createdAt)}</Time>
-       
-      </>
-    )}
-  </Wrapper>
-</Box>
-
+            <Wrapper>
+              {isFileMessage ? (
+                <Imagemessage message={message} />
+              ) : (
+                <>
+                  <Text>{message.text}</Text>
+                  <Time>{format(message.createdAt)}</Time>
+                </>
+              )}
+            </Wrapper>
+          </Box>
         </>
       )}
+      {setPrevSender(message.senderId._id)} {/* Update previous sender */}
     </>
   );
 }
