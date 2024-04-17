@@ -20,7 +20,7 @@ export default function GroupBox() {
         <EmptyChat />
       ) : (
         <>
-        {selectedChat.isGroupChat}
+        {/* {selectedChat.isGroupChat} */}
           <GroupHeader />
           <Messages groupDetails={groupDetails} />
           

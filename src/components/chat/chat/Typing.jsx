@@ -6,28 +6,26 @@ import { Box, InputBase } from "@mui/material";
 import styled from "@emotion/styled";
 import { uploadFile } from "../../../services/api";
 import SendIcon from "@mui/icons-material/Send";
-import { AccountContext } from "../../../context/AccountProvider";
 import Lottie from 'react-lottie';
 import animationData from "../animations/typing.json";
 import Picker from 'emoji-picker-react';
+import { AccountContext } from "../../../context/AccountProvider";
 
 const Container = styled(Box)`
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  padding: 10px 15px;
   background: #f0f0f0;
   width: 100%;
-  height: 10vh;
-  & > * {
-    margin: 5px;
-    color: #919191;
-  }
+  position: fixed;
+  bottom: 0;
+  left: 0;
 `;
 
 const InputContainer = styled(Box)`
   border-radius: 18px;
   background-color: #ffffff;
-  width: calc(94% - 100px);
+  width: calc(100% - 70px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,19 +33,15 @@ const InputContainer = styled(Box)`
   border: 1px solid #ccc;
 `;
 
-const InputField = styled(InputBase)({
-  marginLeft: "8px",
-  flex: "1",
-  color: "#333",
-  wordBreak: "break-all",
-  overflow: "scroll",
-  lineBreak: "auto",
-});
+const InputField = styled(InputBase)`
+  flex: 1;
+  color: #333;
+`;
 
-const RotatedAttachIcon = styled(AttachFileIcon)({
-  transform: "rotate(45deg)",
-  color: "#666",
-});
+const RotatedAttachIcon = styled(AttachFileIcon)`
+  transform: rotate(45deg);
+  color: #666;
+`;
 
 export default function Typing({
   sendText,
@@ -63,8 +57,9 @@ export default function Typing({
   const [showPicker, setShowPicker] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
-    setNewMessage(prevInput => prevInput + emojiObject.emoji);
-    setShowPicker(false);
+    const emoji = event?.emoji ?? '';
+    setNewMessage(prevInput => prevInput + emoji);
+    setShowPicker(false); 
   };
 
   const onFileChange = (e) => {
@@ -92,9 +87,13 @@ export default function Typing({
 
   return (
     <Container>
-      <EmojiEmotionsOutlinedIcon style={{ color: "#666" }} onClick={() => setShowPicker(val => !val)} />
+      <EmojiEmotionsOutlinedIcon 
+        style={{ color: "#666", cursor: "pointer" }} 
+        onClick={() => setShowPicker(val => !val)}
+      />
+      {showPicker && <Picker onEmojiClick={onEmojiClick} />}
       <label htmlFor="fileInput">
-        <RotatedAttachIcon />
+        <RotatedAttachIcon style={{ cursor: "pointer" }} />
       </label>
       <input
         type="file"
@@ -113,9 +112,8 @@ export default function Typing({
         />
         <SendIcon
           style={{ color: "#00aaff", cursor: "pointer" }}
-          onClick={sendText}
+          onClick={() => sendText({ key: 'Enter' })} 
         />
-        {showPicker && <Picker onEmojiClick={onEmojiClick} />}
       </InputContainer>
       {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
     </Container>

@@ -16,19 +16,19 @@ export default function EmptyChat() {
   });
 
   const Image = styled('img')({
-    width: '400px', // Add unit (e.g., px) to the width
-    marginTop: '100px', // Add unit (e.g., px) to the marginTop
+    width: '400px', // Added unit (px)
+    marginTop: '100px', // Added unit (px)
   });
 
   return (
     <Component>
       <Container>
-        <Image src={emptyChatImage} alt="Empty chat" />
-        <Typography variant="h5">
-          Whatsapp Web
+        <Image src={emptyChatImage} alt="No Messages" />
+        <Typography variant="h5" color="text.secondary">
+          Welcome to Your Chat App!
         </Typography>
-        <Typography variant="body1">
-          Use WhatsApp Web to receive and send messages.
+        <Typography variant="body1" color="text.secondary">
+          Select a chat to start messaging, or use the menu to create or join a group.
         </Typography>
       </Container>
     </Component>

@@ -92,7 +92,6 @@ export default function Messages() {
       });
 
       socket.on("typing", () => {
-        console.log('received');
         setIsTyping(true);
       });
 
@@ -101,12 +100,10 @@ export default function Messages() {
       });
 
       socket.on("stop typing", () => {
-        console.log('not called')
         setIsTyping(false);
       });
 
       socket.on("message received", (newMessageReceived) => {
-        console.log(newMessageReceived,'ok');
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
@@ -159,8 +156,8 @@ export default function Messages() {
     }
   }, [messages]);
 
-  const sendText = async (e) => {
-    if (e.key === "Enter" && newMessage) {
+  const sendText = async () => {
+    if (newMessage) {
       socket.emit("stop typing", selectedChat?._id);
 
       const isGroup = !selectedChat?.members;
@@ -212,7 +209,6 @@ export default function Messages() {
 
     if (!typing) {
       setTyping(true);
-      console.log('here');
       socket?.emit("typing", selectedChat?._id);
     }
 
@@ -221,7 +217,6 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      console.log('stopped');
       socket?.emit("stop typing", selectedChat?._id);
       setTyping(false);
     }, delay);
@@ -249,7 +244,7 @@ export default function Messages() {
             <ArrowBack />
           </IconButton>
           <Typography>
-            {person ? person.name : groupDetails ? groupDetails.name : ""}
+            {/* {person ? person.name : groupDetails ? groupDetails.name : ""} */}
           </Typography>
         </Typography>
         <Box
@@ -322,6 +317,7 @@ export default function Messages() {
         newMessage={newMessage}
         typingHandler={typingHandler}
         sendText={sendText}
+        setNewMessage={setNewMessage}
       />
       <ToastContainer position="top-center" />
     </Wrapper>
