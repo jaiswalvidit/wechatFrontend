@@ -10,7 +10,7 @@ export default function GroupItem({ group, onClick }) {
   };
 
   const [user, setUser] = useState(null);
-  const {currentMessage,setCurrentMessage}=useContext(AccountContext);
+  const {currentMessage}=useContext(AccountContext);
 
   useEffect(() => {
     const fetchUser = async (senderId) => {

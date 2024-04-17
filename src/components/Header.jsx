@@ -3,7 +3,7 @@ import { Box, styled, Avatar } from '@mui/material';
 import InfoDrawer from './chat/InfoDrawer';
 import HeaderMenu from './HeaderMenu';
 import { AccountContext } from '../context/AccountProvider';
-import GroupsIcon from '@mui/icons-material/Groups';
+// import GroupsIcon from '@mui/icons-material/Groups';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationModal from './NotificationModal';
@@ -36,12 +36,12 @@ const CustomAvatar = styled(Avatar)({
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = useState(false);
-  const { userDetails, groups, setGroups, notification, setSelectedChat, setIsGroupCreate, isGroupCreate } = useContext(AccountContext);
+  const { userDetails, notification, setSelectedChat, setIsGroupCreate, isGroupCreate } = useContext(AccountContext);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setOpenDrawer(!openDrawer);
-  };
+  // const toggleDrawer = () => {
+  //   setOpenDrawer(!openDrawer);
+  // };
 
   const handleGroupCreateOpen = () => {
     setIsGroupCreate(!isGroupCreate);
@@ -52,10 +52,10 @@ export default function Header() {
     setIsNotificationModalOpen(true);
   };
 
-  const handleGroupsListToggle = () => {
-    setGroups(!groups);
-    setSelectedChat();
-  };
+  // const handleGroupsListToggle = () => {
+  //   setGroups(!groups);
+  //   setSelectedChat();
+  // };
   const handleCLick=()=>{
     console.log('clicked');
     <Profile/>

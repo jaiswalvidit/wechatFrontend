@@ -11,7 +11,7 @@ export default function GroupCreate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState('');
-  const { userDetails, setSelectedChat } = useContext(AccountContext);
+  const { userDetails } = useContext(AccountContext);
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {

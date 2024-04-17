@@ -1,11 +1,11 @@
-import React, { useContext, useEffect} from "react";
-import { Dialog, Box, styled } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Dialog, Box, styled, Button } from "@mui/material";
 import Menu from "../Menu";
 import EmptyChat from "./chat/EmptyChat";
 import Chatbox from "./chat/Chatbox";
 import { AccountContext } from "../../context/AccountProvider";
 import GroupBox from "../Groups/GroupBox";
-// import { io } from 'socket.io-client';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const dialogStyle = {
   height: "100%",
@@ -20,71 +20,119 @@ const dialogStyle = {
 
 const Component = styled(Box)({
   display: "flex",
+  flexDirection: "row",
+  '@media (max-width: 600px)': {
+    flexDirection: "column",
+  }
 });
 
 const Left = styled(Box)({
   minWidth: '250px',
-  width: '35vw'
+  width: '35vw',
+  '@media (max-width: 600px)': {
+    width: '100%',
+    minWidth: '100%',
+  }
 });
 
 const Right = styled(Box)({
+  position: 'relative',
   width: '65vw',
   minWidth: '300px',
   height: '100%',
   borderLeft: '1px solid rgba(0,0,0,0.14)',
+  '@media (max-width: 600px)': {
+    width: '100%',
+    minWidth: '100%',
+    borderTop: '1px solid rgba(0,0,0,0.14)',
+    borderLeft: 'none',
+  }
 });
+
+const BackButton = styled(Button)({
+  position: 'absolute',
+  top: '10px',
+  left: '10px',
+});
+
 export default function ChatDialog() {
-  const {groupDetails, userDetails, setActiveUsers, socket, selectedChat,groups} = useContext(AccountContext);
-  console.log(selectedChat,'sssssss');
+  const { groupDetails, userDetails, setActiveUsers, socket, selectedChat, groups } = useContext(AccountContext);
+  const [showRightComponent, setShowRightComponent] = useState(true);
+  const [isSmallDevice, setIsSmallDevice] = useState(false);
+
   useEffect(() => {
     if (socket && userDetails) {
       socket.emit('addUser', userDetails._id);
-      socket.on('getUsers', (users) => {
-        console.log('active users are', users);
+      socket.on('getUsers', users => {
         setActiveUsers(users);
       });
-    }
-    
-    // Add error handling for socket connection and event listeners
-    if (socket) {
-      socket.on('connect_error', (error) => {
+      socket.on('connect_error', error => {
         console.error('Socket connection error:', error);
-        // Handle error (e.g., display error message to user)
       });
-
-      socket.on('error', (error) => {
+      socket.on('error', error => {
         console.error('Socket error:', error);
-        // Handle error (e.g., display error message to user)
       });
-
-      // Clean up event listeners
       return () => {
         socket.off('connect_error');
         socket.off('error');
       };
     }
   }, [socket, userDetails, setActiveUsers]);
-  // console.log('chat is as follo',selectedChat.isGroupChat);
+
+  useEffect(() => {
+    if (selectedChat && Object.keys(selectedChat).length !== 0 && selectedChat.isGroupChat !== undefined) {
+      setShowRightComponent(true);
+    } else {
+      setShowRightComponent(false);
+    }
+  }, [selectedChat]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallDevice(window.innerWidth <= 600);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
       <Component>
-        <Left>
-          <Menu />
-        </Left>
-        <Right>
-        {/* // Assuming selectedChat is defined */}
-{
- (!selectedChat || Object.keys(selectedChat).length === 0 || selectedChat.isGroupChat===undefined) ?
-   <EmptyChat />:(
-  (selectedChat.isGroupChat === false)? 
-  <Chatbox />:
-
-   <GroupBox />)
-
-}
-
-
-        </Right>
+        {isSmallDevice ? (
+          showRightComponent ? (
+            <Right>
+              <BackButton variant="contained" onClick={() => setShowRightComponent(false)}><ArrowBackIcon/></BackButton>
+              {
+                selectedChat && selectedChat.isGroupChat === false ?
+                <Chatbox /> :
+                <GroupBox />
+              }
+            </Right>
+          ) : (
+            <Left>
+              <Menu />
+            </Left>
+          )
+        ) : (
+          <>
+            <Left>
+              <Menu />
+            </Left>
+            {showRightComponent && (
+              <Right>
+               
+                {
+                  selectedChat && selectedChat.isGroupChat === false ?
+                  <Chatbox /> :
+                  <GroupBox />
+                }
+              </Right>
+            )}
+          </>
+        )}
       </Component>
     </Dialog>
   );
