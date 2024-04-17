@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Box, List } from '@mui/material';
-import { getGroups } from '../../services/api';
-import { AccountContext } from '../../context/AccountProvider';
+import { Box, List, ListItemText, Typography } from '@mui/material';
 import GroupItem from './GroupItem';
-
+import { getGroups } from '../../services/api';
+import { useContext, useEffect, useState } from 'react';
+import { AccountContext } from '../../context/AccountProvider';
 export default function GroupList({ text }) {
   const [groups, setGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
   const { userDetails, setSelectedChat } = useContext(AccountContext);
 
   useEffect(() => {
-    // Function to fetch groups
     const fetchGroups = async () => {
       if (!userDetails || !userDetails._id) {
         console.log('User details are empty or incomplete.');
@@ -20,37 +18,38 @@ export default function GroupList({ text }) {
         const response = await getGroups(userDetails._id);
         if (response.groups) {
           setGroups(response.groups);
-          // Filter the groups based on the provided text
-          const filtered = response.groups.filter(group => group.group.toLowerCase().includes(text.toLowerCase()));
+          const filtered = response.groups.filter(group =>
+            group.group.toLowerCase().includes(text.toLowerCase())
+          );
           setFilteredGroups(filtered);
-          console.log('Fetched groups:', response.groups);
         }
       } catch (error) {
         console.error('Failed to fetch groups:', error);
       }
     };
 
-    // Calling fetchGroups if userDetails exists and has an _id
     fetchGroups();
-  }, [userDetails, text]); // Dependency array, re-run useEffect when userDetails or text changes
+  }, [userDetails, text]);
 
-  const handleGroupClick = (group) => {
-    console.log('Selected group:', group);
+  const handleGroupClick = group => {
     setSelectedChat(group);
-    // Optionally emit a socket event if a socket connection exists
-    // if (socket) {
-    //   socket.emit('joinGroup', group._id);
-    // }
   };
 
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper', overflowY: 'scroll' }}>
+    <Box sx={{ width: '90%', bgcolor: 'background.paper', overflowY: 'auto', padding: 2 }}>
+      <Typography variant="h6" sx={{ color: 'primary.main', padding: '8px', fontWeight: 'medium' }}>
+        Groups:
+      </Typography>
       <List>
         {filteredGroups.length === 0 ? (
-          <Box sx={{ padding: '10px' }}>No groups found</Box>
+          <ListItemText primary="No groups found" sx={{ textAlign: 'center', color: 'text.secondary' }} />
         ) : (
           filteredGroups.map(group => (
-            <GroupItem key={group._id} group={group} onClick={() => handleGroupClick(group)} />
+            <GroupItem
+              key={group._id}
+              group={group}
+              onClick={() => handleGroupClick(group)}
+            />
           ))
         )}
       </List>

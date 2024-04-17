@@ -11,55 +11,60 @@ const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f5f5f5;
+`;
 
-  .card {
-    background-color: #131324;
-    color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
+const Card = styled.div`
+  background-color: #fff;
+  color: #333;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+`;
 
-  .input {
-    width: 100%;
-    padding: 0.5rem;
-    // margin-bottom: 1rem;
-    margin:1rem 2px;
-    border: none;
-    border-radius: 0.25rem;
-    background-color: #1f1f2f;
-    color: white;
-    font-size: 1rem;
-  }
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
 
-  .btn-primary {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 0.4rem;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-  }
+const Input = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 1rem;
+`;
 
-  .center {
-    text-align: center;
-  }
+const Button = styled.button`
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+`;
 
-  .error {
-    color: red;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-  }
+const Center = styled.div`
+  text-align: center;
+`;
 
-  .signup-link {
-    color: orange;
-    margin-left: 0.5rem;
-    text-decoration: none;
-  }
+const Error = styled.div`
+  color: red;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+`;
+
+const SignupLink = styled(Link)`
+  color: orange;
+  margin-left: 0.5rem;
+  text-decoration: none;
 `;
 
 const Login = () => {
@@ -111,12 +116,11 @@ const Login = () => {
   return (
     <FormContainer>
       <form onSubmit={handleSubmit}>
-        <div className="card">
-          <h1 className="center">Login Page</h1>
+        <Card>
+          <Title>Login Page</Title>
           <div className="form">
-            <input
+            <Input
               type="text"
-              className="input"
               id="email"
               name="email"
               value={credentials.email}
@@ -126,9 +130,8 @@ const Login = () => {
             />
           </div>
           <div className="form">
-            <input
+            <Input
               type="password"
-              className="input"
               id="password"
               name="password"
               value={credentials.password}
@@ -137,18 +140,17 @@ const Login = () => {
               required
             />
           </div>
-          {error && <div className="error">{error}</div>}
-          <button
+          {error && <Error>{error}</Error>}
+          <Button
             type="submit"
-            className="btn-primary"
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
-          </button>
-          <div className="center" style={{ fontSize: '1.5rem', margin: '1rem' }}>
-            Don't have an account? <Link to="/auth/signin" className="signup-link">Sign up</Link>
-          </div>
-        </div>
+          </Button>
+          <Center>
+            Don't have an account? <SignupLink to="/auth/signin">Sign up</SignupLink>
+          </Center>
+        </Card>
       </form>
       <ToastContainer position="top-center" />
     </FormContainer>

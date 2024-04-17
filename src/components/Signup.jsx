@@ -6,36 +6,49 @@ import styled from '@emotion/styled';
 
 const FormContainer = styled.div`
   height: 100vh;
-  
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:grey;
+  background-color: #f5f5f5;
+`;
 
-  .card {
-    background-color: #131324;
-    color: white;
-    padding: 0.5rem 2rem;
-    border-radius: 1rem;
-    width:40vw;
-    
-  }
+const Card = styled.div`
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+`;
 
-  
-  
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+`;
 
-  
+const Input = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+`;
 
-  .btn-danger {
-    background-color: #ff4757;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 0.4rem;
-    font-size: 1rem;
-    cursor: pointer;
-  }
+const Button = styled.button`
+  width: 100%;
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+`;
+
+const Center = styled.div`
+  text-align: center;
+  margin-top: 1rem;
 `;
 
 const Signup = () => {
@@ -45,7 +58,6 @@ const Signup = () => {
     name: '',
     email: '',
     password: '',
-    // picture: '', // Add picture field to state
   });
 
   const [formError, setFormError] = useState('');
@@ -93,61 +105,42 @@ const Signup = () => {
 
   return (
     <FormContainer>
-      
+      <Card>
+        <Title>Signup Page</Title>
         <form onSubmit={handleSubmit}>
-        <div className='card'>
-        <h1 className="center">Signup Page</h1>
-        
-          <div className="form">
-            <input
-              type="text"
-              className="input"
-              id="name"
-              name="name"
-              value={credentials.name}
-              onChange={handleChange}
-              placeholder='Name'
-              required
-            />
-          </div>
-
-          
-            <input
-              type="text"
-              className="input"
-              id="email"
-              name="email"
-              placeholder='Email'
-              value={credentials.email}
-              onChange={handleChange}
-              required
-            />
-          
-
-          
-            <input
-              type='password'
-              className="input"
-              id="password"
-              name="password"
-              placeholder='Password'
-              value={credentials.password}
-              onChange={handleChange}
-              required
-            />
-         
-
-         
-
-          <div className="text-center">
-            <button type="submit" className=" button">Sign Up</button>
-            <div className='center' style={{fontSize:'1.5rem',margin:'1rem'}}>
-            Already have an account<Link to="/auth/login" style={{color:'orange', marginLeft:'.5rem'}}>Login</Link>
-          </div>
-          </div>
-          </div>
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            value={credentials.name}
+            onChange={handleChange}
+            placeholder="Name"
+            required
+          />
+          <Input
+            type="text"
+            id="email"
+            name="email"
+            value={credentials.email}
+            onChange={handleChange}
+            placeholder="Email"
+            required
+          />
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
+          <Button type="submit">Sign Up</Button>
         </form>
-      
+        <Center>
+          Already have an account? <Link to="/auth/login" style={{ color: 'orange' }}>Login</Link>
+        </Center>
+      </Card>
       <ToastContainer position="top-center" />
     </FormContainer>
   );

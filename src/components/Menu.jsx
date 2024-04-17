@@ -20,10 +20,28 @@ export default function Menu() {
         {isGroupCreate===false  ?
         <> <SearchAppBar setText={setText} text={text} />
        
-       <Button onClick={() => {setShowChats(!showChats);
-      setSelectedChat() }} variant="contained" color="primary" style={{ marginBottom: '10px' }}>
-         {showChats ? 'Show Groups' : 'Show Chats'}
-       </Button>
+       <Box sx={{
+  display: 'flex',
+  flexDirection: 'column',
+  margin:'0px auto', // Centers children horizontally in the container
+  width: '70%' // Ensures the container takes full width
+}}>
+  <Button
+    onClick={() => {
+      setShowChats(!showChats);
+      setSelectedChat({});
+    }}
+    variant="contained"
+    color="primary"
+    sx={{
+      mt: 2, // Adds space at the top
+      width: '100%' // Full width for better mobile responsiveness
+    }}
+  >
+    {showChats ? 'Show Groups' : 'Show Chats'}
+  </Button>
+</Box>
+
        <div style={{height:'65vh'}}>
        
        {showChats ? <Conversations text={text} /> : <GroupList text={text} />}

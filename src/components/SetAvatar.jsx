@@ -54,9 +54,9 @@ const AvatarSelector = ({ onSelect }) => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <div>
-        <h2 style={{ textAlign: 'center' }}>Choose Your Avatar</h2>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f5f5f5' }}>
+      <div style={{ padding: '20px', borderRadius: '10px', backgroundColor: '#fff', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>Choose Your Avatar</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
           {avatars.map((avatar, index) => (
             <img
@@ -67,7 +67,8 @@ const AvatarSelector = ({ onSelect }) => {
                 width: '100px',
                 height: '100px',
                 margin: '10px',
-                border: selectedAvatar === avatar ? '2px solid blue' : '2px solid transparent',
+                border: selectedAvatar === avatar ? '2px solid #007bff' : '2px solid transparent',
+                borderRadius: '10px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s ease',
                 transform: selectedAvatar === avatar ? 'scale(1.1)' : 'scale(1)'
@@ -76,19 +77,21 @@ const AvatarSelector = ({ onSelect }) => {
             />
           ))}
         </div>
-        <button
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}> <button
           onClick={setProfilePicture}
           disabled={!selectedAvatar}
           className="submit-btn"
+          style={{ marginTop: '20px', backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}
         >
           Set as Profile Picture
         </button>
         <button
           onClick={handleBack}
-          style={{ marginTop: '20px' }}
+          style={{ marginTop: '20px', backgroundColor: '#ddd', color: '#333', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}
         >
           Go Back
-        </button>
+        </button></div>
+       
       </div>
     </div>
   );
