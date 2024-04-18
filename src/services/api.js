@@ -90,7 +90,7 @@ export const convoDetails=async(id)=>{
 export const uploadFile = async (data) => {
   try {
     const response = await axios.post(`https://wechatbackend-qlpp.onrender.com/api/file/upload`, data);
-    console.log(response);
+    console.log(response,'okkkkk');
     return response.data;
   } catch (error) {
     console.error('Error uploading file:', error);

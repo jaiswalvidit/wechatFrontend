@@ -22,6 +22,10 @@ const Container = styled(Box)`
   left: 0;
 `;
 
+const EmojiContainer = styled(Box)`
+  position: relative;
+`;
+
 const InputContainer = styled(Box)`
   border-radius: 18px;
   background-color: #ffffff;
@@ -65,6 +69,7 @@ export default function Typing({
   const onFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile);
+    
     setNewMessage(selectedFile?.name);
   };
 
@@ -76,7 +81,8 @@ export default function Typing({
         data.append("file", file);
         try {
           const response = await uploadFile(data);
-          setImage(response.data);
+          console.log(response,'ok');
+          setImage(response);
         } catch (error) {
           console.error("Error uploading file:", error);
         }
@@ -86,37 +92,38 @@ export default function Typing({
   }, [file, setImage]);
 
   return (
-    <><Container>
-    <EmojiEmotionsOutlinedIcon 
-      style={{ color: "#666", cursor: "pointer" }} 
-      onClick={() => setShowPicker(val => !val)}
-    />
-    {showPicker && <Picker onEmojiClick={onEmojiClick} />}
-    <label htmlFor="fileInput">
-      <RotatedAttachIcon style={{ cursor: "pointer" }} />
-    </label>
-    <input
-      type="file"
-      id="fileInput"
-      style={{ display: "none" }}
-      onChange={onFileChange}
-    />
-    <InputContainer>
-      {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
-      <InputField
-        placeholder="Type a message"
-        onChange={typingHandler}
-        onKeyDown={sendText}
-        value={newMessage}
-        type="text"
+    <Container>
+      <EmojiContainer>
+        <EmojiEmotionsOutlinedIcon 
+          style={{ color: "#666", cursor: "pointer" }} 
+          onClick={() => setShowPicker(val => !val)}
+        />
+        {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+      </EmojiContainer>
+      <label htmlFor="fileInput">
+        <RotatedAttachIcon style={{ cursor: "pointer" }} />
+      </label>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: "none" }}
+        onChange={onFileChange}
       />
-      <SendIcon
-        style={{ color: "#00aaff", cursor: "pointer" }}
-        onClick={() => sendText({ key: 'Enter' })} 
-      />
-    </InputContainer>
-    {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
-  </Container></>
-    
+      <InputContainer>
+        {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
+        <InputField
+          placeholder="Type a message"
+          onChange={typingHandler}
+          onKeyDown={sendText}
+          value={newMessage}
+          type="text"
+        />
+        <SendIcon
+          style={{ color: "#00aaff", cursor: "pointer" }}
+          onClick={() => sendText({ key: 'Enter' })} 
+        />
+      </InputContainer>
+      {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
+    </Container>
   );
 }
