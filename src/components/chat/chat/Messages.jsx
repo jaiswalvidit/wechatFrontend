@@ -10,8 +10,10 @@ import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, otherMembe
 import { io } from "socket.io-client";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { format } from "../utils";
-
+import { format,download } from "../utils";
+import { GetApp as GetAppIcon } from '@mui/icons-material';
+// import { download, formatDate } from '../../../utils';
+import { iconPDF } from "../../../constants/data";
 const Wrapper = styled(Box)({
   backgroundSize: "80%",
   objectFit: "contain",
@@ -67,7 +69,7 @@ export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [typing, setTyping] = useState(false); // Track typing status
   const [newMessage, setNewMessage] = useState(""); // Track new message
-
+  // const [file,setFile]
   const selectedChatCompare = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
   const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
@@ -82,7 +84,7 @@ export default function Messages() {
       newSocket.disconnect();
     };
   }, [ENDPOINT]);
-
+  console.log(messages,'message');
   useEffect(() => {
     if (socket) {
       socket.on("connect", () => {
@@ -92,6 +94,7 @@ export default function Messages() {
       });
 
       socket.on("typing", () => {
+        console.log('received');
         setIsTyping(true);
       });
 
@@ -100,10 +103,12 @@ export default function Messages() {
       });
 
       socket.on("stop typing", () => {
+        console.log('not called')
         setIsTyping(false);
       });
 
       socket.on("message received", (newMessageReceived) => {
+        console.log(newMessageReceived,'ok');
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
@@ -135,6 +140,7 @@ export default function Messages() {
     try {
       const data = await getMessage(selectedChat?._id);
       setMessages(data?.message);
+      console.log(data.message,'lists are');
       setLoading(false);
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -156,8 +162,9 @@ export default function Messages() {
     }
   }, [messages]);
 
-  const sendText = async () => {
-    if (newMessage) {
+  const sendText = async (e) => {
+    console.log(e);
+    if (e.key === "Enter" && newMessage) {
       socket.emit("stop typing", selectedChat?._id);
 
       const isGroup = !selectedChat?.members;
@@ -201,7 +208,31 @@ export default function Messages() {
       }
     }
   };
+  const ImageMessage = ({ message }) => {
 
+    return (
+        <div style={{ position: 'relative' }}>
+          {message.text}
+            {
+                message?.text?.includes('.pdf') ?
+                    <div style={{ display: 'flex' }}>
+                        <img src={iconPDF} alt="pdf-icon" style={{ width: 80 }} />
+                        <Typography style={{ fontSize: 14 }} >{message.text.split("/").pop()}</Typography>
+                    </div>
+                : 
+                    <img style={{ width: 300, height: '30%', objectFit: 'cover' }} src={message.text} />
+            }
+            <Time style={{ position: 'absolute', bottom: 0, right: 0 }}>
+                <GetAppIcon 
+                    onClick={(e) => download(e, message.text)} 
+                    fontSize='small' 
+                    style={{ marginRight: 10, border: '1px solid grey', borderRadius: '50%' }} 
+                />
+              
+            </Time>
+        </div>
+    )
+}
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
 
@@ -209,6 +240,7 @@ export default function Messages() {
 
     if (!typing) {
       setTyping(true);
+      console.log('here');
       socket?.emit("typing", selectedChat?._id);
     }
 
@@ -217,12 +249,13 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
+      console.log('stopped');
       socket?.emit("stop typing", selectedChat?._id);
       setTyping(false);
     }, delay);
   };
 
-  const person = otherMember(selectedChat, userDetails);
+  // const person = otherMember(selectedChat, userDetails);
 
   return (
     <Wrapper>
@@ -301,7 +334,13 @@ export default function Messages() {
                       }}
                     > 
                       <div style={{display:'flex'}}>
-                        <Text>{m.text}</Text>
+                      <Text>
+  {m.type === 'file' ? 
+    <ImageMessage message={m}/>
+    : m.text}
+</Text>
+
+
                         <Time>{format(m.createdAt)}</Time>
                       </div>
                     </span>
@@ -318,6 +357,10 @@ export default function Messages() {
         typingHandler={typingHandler}
         sendText={sendText}
         setNewMessage={setNewMessage}
+        file={file}
+        setFile={setFile}
+        image={image}
+        setImage={setImage}
       />
       <ToastContainer position="top-center" />
     </Wrapper>

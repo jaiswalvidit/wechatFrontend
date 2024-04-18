@@ -11,11 +11,12 @@ export default function Profile() {
   const ImageContainer = styled(Box)({
     display: 'flex', 
     justifyContent: 'center',
+    marginBottom: '20px', // Added margin bottom for spacing
   });
 
   const BookWrapper = styled(Box)({
     background: '#FFFFFF',
-    padding: '12px 30px 2px',
+    padding: '12px 30px', // Adjusted padding
     boxShadow: '0px 1px 3px rgba(0,0,0,0.08)',
     fontSize: '13px',
     color: '#009688',
@@ -23,7 +24,7 @@ export default function Profile() {
   });
 
   const Description = styled(Box)({
-    padding: '15px 20px 20px 30px',
+    padding: '0 30px', // Adjusted padding
     '& > p': {
       fontSize: '13px',
       color: '#8686ab',
@@ -47,11 +48,11 @@ export default function Profile() {
       <Description>
         <Typography>This is not your username or password</Typography>
       </Description>
-      <Box>
+      <Box sx={{ padding: '0 30px', marginBottom: '20px' }}> {/* Adjusted padding and added margin bottom */}
         <Typography>About:</Typography>
         <Typography>When opportunity gives you a chance, take it.</Typography>
       </Box>
-      <Button variant="contained" onClick={handleEditProfile} sx={{ margin: 2 }}>
+      <Button variant="contained" onClick={handleEditProfile} sx={{ margin: '0 30px' }}> {/* Adjusted margin */}
         Edit Profile
       </Button>
     </>

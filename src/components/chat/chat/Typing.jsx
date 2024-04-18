@@ -16,8 +16,8 @@ const Container = styled(Box)`
   align-items: center;
   padding: 10px 15px;
   background: #f0f0f0;
-  width: 100%;
-  position: fixed;
+  width: 90%;
+  // position: fixed;
   bottom: 0;
   left: 0;
 `;
@@ -86,36 +86,37 @@ export default function Typing({
   }, [file, setImage]);
 
   return (
-    <Container>
-      <EmojiEmotionsOutlinedIcon 
-        style={{ color: "#666", cursor: "pointer" }} 
-        onClick={() => setShowPicker(val => !val)}
+    <><Container>
+    <EmojiEmotionsOutlinedIcon 
+      style={{ color: "#666", cursor: "pointer" }} 
+      onClick={() => setShowPicker(val => !val)}
+    />
+    {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+    <label htmlFor="fileInput">
+      <RotatedAttachIcon style={{ cursor: "pointer" }} />
+    </label>
+    <input
+      type="file"
+      id="fileInput"
+      style={{ display: "none" }}
+      onChange={onFileChange}
+    />
+    <InputContainer>
+      {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
+      <InputField
+        placeholder="Type a message"
+        onChange={typingHandler}
+        onKeyDown={sendText}
+        value={newMessage}
+        type="text"
       />
-      {showPicker && <Picker onEmojiClick={onEmojiClick} />}
-      <label htmlFor="fileInput">
-        <RotatedAttachIcon style={{ cursor: "pointer" }} />
-      </label>
-      <input
-        type="file"
-        id="fileInput"
-        style={{ display: "none" }}
-        onChange={onFileChange}
+      <SendIcon
+        style={{ color: "#00aaff", cursor: "pointer" }}
+        onClick={() => sendText({ key: 'Enter' })} 
       />
-      <InputContainer>
-        {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
-        <InputField
-          placeholder="Type a message"
-          onChange={typingHandler}
-          onKeyDown={sendText}
-          value={newMessage}
-          type="text"
-        />
-        <SendIcon
-          style={{ color: "#00aaff", cursor: "pointer" }}
-          onClick={() => sendText({ key: 'Enter' })} 
-        />
-      </InputContainer>
-      {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
-    </Container>
+    </InputContainer>
+    {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
+  </Container></>
+    
   );
 }
