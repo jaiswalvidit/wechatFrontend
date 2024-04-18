@@ -72,13 +72,16 @@ export default function Chat({ user, onClick }) {
             <>
             {currentMessage.text} {format(currentMessage.createdAt)}
           </>
-          ) : (
-            // Otherwise, render text from user.messages if it exists
-            user.messages ? (
-              <>
-                {user.messages.text} {format(user.messages.createdAt)}
-              </>
-            ) : (
+          ) :(
+            // Check if user.messages exists before trying to render it
+            user && user.messages ? (
+              <Box style={{ display: 'flex', justifyContent: "space-between" }}>
+                {/* Display the message text if it is of type 'text', otherwise display 'media' */}
+                {user.messages.type === 'text' ? <>{user.messages.text}</> : 'media'}
+                {/* Format and display the creation date of the message */}
+                <span>{format(user.messages.createdAt)}</span>
+              </Box>
+            ): (
               // If user.messages doesn't exist or currentMessage doesn't match, render nothing
               <></>
             )

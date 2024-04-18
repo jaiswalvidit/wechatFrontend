@@ -5,30 +5,25 @@ import { format } from '../chat/utils';
 import { Box, Typography } from '@mui/material';
 
 export default function GroupItem({ group, onClick }) {
-  const handleGroupClick = () => {
-    onClick(); // Call the onClick handler passed from the parent component
-  };
-
   const [user, setUser] = useState(null);
-  const {currentMessage}=useContext(AccountContext);
-
+  const { currentMessage } = useContext(AccountContext);
+console.log(currentMessage,'lll');
   useEffect(() => {
-    const fetchUser = async (senderId) => {
+    const fetchUser = async () => {
+      if (!group.messages) return;  // Return early if no messages are defined
       try {
-        const userDetails = await specificUser(senderId);
+        const userDetails = await specificUser(group.messages.senderId);
         setUser(userDetails);
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
     };
 
-    if (group.messages) {
-      fetchUser(group.messages.senderId);
-    }
+    fetchUser();
   }, [group.messages]);
 
   return (
-    <div onClick={handleGroupClick} style={styles.container}>
+    <div onClick={onClick} style={styles.container}> {/* Direct use of onClick */}
       <h3 style={styles.heading}>{group.group}</h3>
       <div style={styles.infoContainer}>
         <div>
@@ -38,38 +33,32 @@ export default function GroupItem({ group, onClick }) {
           <span style={styles.label}>Members:</span>{' '}
           {group.users.map((participant, index) => (
             <span key={index} style={styles.participant}>
-              {participant.name}
-              {index !== group.users.length - 1 && ', '}
+              {participant.name}{index !== group.users.length - 1 && ', '}
             </span>
           ))}
         </div>
       </div>
-      {user && (
-        <div style={styles.messageContainer}>
-             {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === group._id ? (
+       {/* Rendering logic for messages */}
+       {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === group._id ? (
             // Render text from currentMessage if it exists and its messageId matches user._id
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="body1">
-              <strong>{currentMessage.senderId.name}:</strong> {currentMessage.text}
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              {format(currentMessage.createdAt)}
-            </Typography>
-          </Box>
-          ) : (
-            // Otherwise, render text from user.messages if it exists
-            user.messages ? (
-              <>
-                {user.messages.text} {format(user.messages.createdAt)}
-              </>
-            ) : (
+            <>
+            {currentMessage.text} {format(currentMessage.createdAt)}
+          </>
+          ) :(
+            // Check if user.messages exists before trying to render it
+            group && group.messages ? (
+              <Box style={{ display: 'flex', justifyContent: "space-between" }}>
+                {/* Display the message text if it is of type 'text', otherwise display 'media' */}
+                {group.messages.type === 'text' ? <>{group.messages.text}</> : 'media'}
+                {/* Format and display the creation date of the message */}
+                <span>{format(group.messages.createdAt)}</span>
+              </Box>
+            ): (
               // If user.messages doesn't exist or currentMessage doesn't match, render nothing
               <></>
             )
           )}
-         
-        </div>
-      )}
+      
     </div>
   );
 }
@@ -78,34 +67,30 @@ const styles = {
   container: {
     cursor: 'pointer',
     padding: '10px',
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#f0f0f0',
     borderRadius: '8px',
     marginBottom: '15px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Shadow for depth
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   heading: {
     fontSize: '1.5rem',
     marginBottom: '10px',
-    color: '#333', // Dark gray text color
+    color: '#333',
   },
   infoContainer: {
     marginBottom: '10px',
   },
-  info: {
-    fontSize: '1rem',
-    color: '#666', // Medium gray text color
-  },
   label: {
     fontWeight: 'bold',
     marginRight: '5px',
-    color: '#444', // Darker gray for labels
+    color: '#444',
   },
   participant: {
     marginRight: '5px',
-    color: '#007bff', // Blue color for participant names
+    color: '#007bff',
   },
   messageContainer: {
-    borderLeft: '2px solid #007bff', // Left border for message container
-    paddingLeft: '10px', // Add padding for the message content
+    borderLeft: '2px solid #007bff',
+    paddingLeft: '10px',
   },
 };
