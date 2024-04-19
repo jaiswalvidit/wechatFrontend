@@ -104,6 +104,7 @@ export default function Messages() {
 
       socket.on("message received", (newMessageReceived) => {
         console.log(newMessageReceived,'received');
+        console.log(selectedChatCompare.current,'ok')
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
