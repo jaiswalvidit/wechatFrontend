@@ -5,6 +5,7 @@ import { AccountContext } from "../../../context/AccountProvider";
 import Typing from "./Typing";
 import { getMessage, newMessages, uploadFile } from "../../../services/api";
 import Message from "./Message";
+import animationData from "../animations/typing.json";
 import { ArrowBack } from "@mui/icons-material";
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, otherMember } from "./miscelleanous";
 import { io } from "socket.io-client";
@@ -13,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { format, download } from "../utils";
 import { GetApp as GetAppIcon } from '@mui/icons-material';
 import { iconPDF } from "../../../constants/data";
+import Lottie from "react-lottie";
 
 const Wrapper = styled(Box)`
   background-size: 80%;
@@ -237,7 +239,7 @@ export default function Messages() {
 
     if (!typing) {
       setTyping(true);
-      socket?.emit("typing", selectedChat?._id);
+      socket?.emit("typing",selectedChat?._id);
     }
 
     let timer;
@@ -245,7 +247,7 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      socket?.emit("stop typing", selectedChat?._id);
+      socket?.emit("stop typing",selectedChat?._id);
       setTyping(false);
     }, delay);
   };
@@ -338,6 +340,7 @@ export default function Messages() {
             </div>
           )}
         </Box>
+        {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
       </ConversationContainer>
       <Typing
         isTyping={isTyping}
