@@ -103,6 +103,7 @@ export default function Messages() {
       });
 
       socket.on("message received", (newMessageReceived) => {
+        console.log(newMessageReceived,'received');
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
@@ -113,9 +114,11 @@ export default function Messages() {
             toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
 
           if (!notification.includes(newMessageReceived)) {
+            console.log('already have');
             setNotification([newMessageReceived, ...notification]);
           }
         } else {
+          console.log('got it ');
           setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
         }
       });
@@ -142,7 +145,7 @@ export default function Messages() {
   useEffect(() => {
     if (selectedChat) {
       fetchData();
-      socket?.emit("join chat", selectedChat?._id);
+      socket?.emit("join chat",selectedChat?._id);
       selectedChatCompare.current = selectedChat;
     }
   }, [selectedChat]);
