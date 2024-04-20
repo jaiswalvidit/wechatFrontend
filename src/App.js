@@ -5,17 +5,13 @@ import Messenger from './components/chat/Messenger';
 import AccountProvider from './context/AccountProvider';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import ChatDialog from './components/chat/ChatDialog';
 import SetAvatar from './components/SetAvatar';
-
-// Define your Google OAuth client ID
-// const clientId = "pj441595@gmail.com";
 
 function App() {
   return (
     <>
     <AccountProvider >
-        {/* <Signup/> */}
+        
         <Router>
 
           <Routes>
@@ -26,9 +22,7 @@ function App() {
             <Route path="/auth/login" element={<Login />} />
 
             <Route path="/auth/signin" element={<Signup />} />
-            {/* <Route path="/auth/message/" element={<ChatDialog />} /> */}
-
-            {/* <Route element={<Error />} /> */}
+          
 
           </Routes>
 

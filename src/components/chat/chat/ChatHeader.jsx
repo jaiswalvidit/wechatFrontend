@@ -9,10 +9,11 @@ import { otherMember } from './miscelleanous';
 
 const Component = styled(Box)({
   display: 'flex',
-  alignItems: 'center',
-  padding: '10px 16px', // Adjusted padding for better spacing
+  // alignItems: 'center',
+  // padding: '10px 16px', // Adjusted padding for better spacing
   backgroundColor: 'grey', // Dark mode friendly color
   height:'10vh',
+
   color: '#E7E9EB', // Light text for better readability
   borderBottom: '1px solid #43484D' // Added border bottom for separation
 });

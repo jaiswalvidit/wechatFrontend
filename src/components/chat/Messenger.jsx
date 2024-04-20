@@ -14,7 +14,7 @@ export default function Messenger() {
   return (
     <div style={{ color: 'pink' }}>
       {userDetails ? (
-        <ChatDialog />
+        <ChatDialog/>
       ) : (
         <>
           <Login />
