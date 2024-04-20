@@ -14,7 +14,7 @@ import SetAvatar from './components/SetAvatar';
 function App() {
   return (
     <>
-    <AccountProvider>
+    <AccountProvider >
         {/* <Signup/> */}
         <Router>
 

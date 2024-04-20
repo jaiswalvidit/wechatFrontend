@@ -114,7 +114,7 @@ const Login = () => {
   };
 
   return (
-    <FormContainer>
+    <FormContainer style={{height:'100vh'}}>
       <form onSubmit={handleSubmit}>
         <Card>
           <Title>Login Page</Title>

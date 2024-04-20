@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Dialog, Box, styled, Button } from "@mui/material";
 import Menu from "../Menu";
-import EmptyChat from "./chat/EmptyChat";
+
 import Chatbox from "./chat/Chatbox";
 import { AccountContext } from "../../context/AccountProvider";
 import GroupBox from "../Groups/GroupBox";
@@ -14,13 +14,14 @@ const dialogStyle = {
   maxWidth: "100%",
   maxHeight: "100%",
   boxShadow: "none",
-  overflow: "scroll",
-  color: '#131324'
+  // backgroundColor: 'orange'
 };
 
 const Component = styled(Box)({
   display: "flex",
   flexDirection: "row",
+  borderRadius:'1 rem',
+  margin:0,
   '@media (max-width: 600px)': {
     flexDirection: "column",
   }
@@ -29,9 +30,11 @@ const Component = styled(Box)({
 const Left = styled(Box)({
   minWidth: '250px',
   width: '35vw',
+  margin:'0px',
   '@media (max-width: 600px)': {
     width: '100%',
     minWidth: '100%',
+    
   }
 });
 
@@ -56,7 +59,7 @@ const BackButton = styled(Button)({
 });
 
 export default function ChatDialog() {
-  const { groupDetails, userDetails, setActiveUsers, socket, selectedChat, groups } = useContext(AccountContext);
+  const { userDetails, setActiveUsers, socket, selectedChat, groups } = useContext(AccountContext);
   const [showRightComponent, setShowRightComponent] = useState(true);
   const [isSmallDevice, setIsSmallDevice] = useState(false);
 
@@ -99,6 +102,7 @@ export default function ChatDialog() {
   }, []);
 
   return (
+    <>
     <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
       <Component>
         {isSmallDevice ? (
@@ -135,5 +139,6 @@ export default function ChatDialog() {
         )}
       </Component>
     </Dialog>
+    </>
   );
 }
