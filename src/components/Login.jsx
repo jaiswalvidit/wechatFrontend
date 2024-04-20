@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from '@emotion/styled';
 import { AccountContext } from '../context/AccountProvider';
+import { io } from "socket.io-client";
 
 const FormContainer = styled.div`
   height: 100vh;
@@ -69,10 +70,21 @@ const SignupLink = styled(Link)`
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUserDetails } = useContext(AccountContext);
+  const { setUserDetails,activeUsers} = useContext(AccountContext);
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
+  const [socket, setSocket] = useState(null);
+  console.log(activeUsers,'connected');
+  useEffect(() => {
+    const newSocket = io(ENDPOINT);
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [ENDPOINT]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -101,7 +113,9 @@ const Login = () => {
       }
 
       const json = await response.json();
+      
       setUserDetails(json.user);
+      socket.emit("setup", json.user);
 
       navigate('/');
     } catch (err) {

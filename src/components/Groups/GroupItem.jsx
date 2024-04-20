@@ -49,7 +49,7 @@ export default function GroupItem({ group, onClick }) {
           ))}
         </Typography>
       </Box>
-
+          
       {currentMessage && currentMessage.messageId === group._id ? (
         <Box style={{ display: 'flex', justifyContent: "space-between" }}>
           <Typography>{currentMessage.text}</Typography>
