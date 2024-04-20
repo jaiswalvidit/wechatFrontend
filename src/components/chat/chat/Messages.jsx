@@ -88,7 +88,7 @@ export default function Messages() {
   useEffect(() => {
     if (socket) {
       socket.on("connect", () => {
-        // socket.emit("setup", userDetails);
+        socket.emit("setup", userDetails);
         setSocketConnected(true);
       });
 
