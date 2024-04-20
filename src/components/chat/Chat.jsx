@@ -11,11 +11,14 @@ const Component = styled(Box)({
   cursor: "pointer",
   border: "1px solid #ccc",
   borderRadius: "5px",
-  margin:'4px',
-  backgroundColor: "#f9f9f9", // Changed background color
-  "&:hover": { // Added hover effect
+  margin: '4px',
+  backgroundColor: "#f9f9f9",
+  "&:hover": {
     backgroundColor: "#e9e9e9",
   },
+  '@media (max-width:600px)': {
+    flexDirection: "column",
+  }
 });
 
 const Image = styled(Avatar)({
@@ -28,29 +31,40 @@ const MessageContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  flexGrow: 1, // Adjusted to grow flexibly
+  flexGrow: 1,
 });
 
 const MessageText = styled(Typography)({
-  color: "#333", // Changed text color
+  color: "#333",
   overflow: "hidden",
   textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
+  whiteSpace: "nowrap", // Changed to 'nowrap' to display content that fits in one row
   maxWidth: "70%",
-  marginBottom: "5px", // Added margin bottom
+  marginBottom: "5px",
+  display: "block",
+  display: "-webkit-box",
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: "vertical",
+  wordBreak: "break-word",
 });
 
-const Timestamp = styled(Typography)({
-  fontSize: "12px",
-  color: "#777", // Changed timestamp color
+const Time = styled(Box)({
+  marginLeft: "auto",
+  fontSize: "0.75rem", // Reduced font size
+  color: "#777",
 });
 
 const Name = styled(Typography)({
-  fontSize: "1rem", // Adjusted font size
+  fontSize: "1rem",
   textTransform: "capitalize",
-  color: "#555", // Changed name color
+  color: "#555",
   fontWeight: 600,
 });
+
+const Text = styled(Box)({
+  overflow: "hidden",
+});
+
 export default function Chat({ user, onClick }) {
   const { messages, isTyping, userDetails, currentMessage } = useContext(AccountContext);
   const other = otherMember(user, userDetails);
@@ -59,30 +73,26 @@ export default function Chat({ user, onClick }) {
     <Component onClick={onClick}>
       <Image src={`data:image/svg+xml;base64,${other.picture}`} alt={other?.name} />
       <MessageContainer>
-        <Box>
+        <Box style={{ display: 'flex', alignItems: 'center' }}>
           <Name>{other.name}</Name>
           {messages && messages.timestamp && (
-            <Timestamp>{format(messages.timestamp)}</Timestamp>
+            <Time>{format(messages.timestamp)}</Time>
           )}
         </Box>
         <MessageText>
-          {/* Rendering logic for messages */}
           {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === user._id ? (
-            // Render text from currentMessage if it exists and its messageId matches user._id
             <>
-            {currentMessage.text} {format(currentMessage.createdAt)}
-          </>
+              {currentMessage.text} {format(currentMessage.createdAt)}
+            </>
           ) :(
-            // Check if user.messages exists before trying to render it
             user && user.messages ? (
-              <Box style={{ display: 'flex', justifyContent: "space-between" }}>
-                {/* Display the message text if it is of type 'text', otherwise display 'media' */}
-                {user.messages.type === 'text' ? <>{user.messages.text}</> : 'media'}
-                {/* Format and display the creation date of the message */}
-                <span>{format(user.messages.createdAt)}</span>
+              <Box style={{ display: 'flex', justifyContent: "space-between", overflow: 'hidden' }}>
+                <Text> {user.messages.type === 'text' ? <>
+                  {user.messages.text.length > 50 ? `${user.messages.text.slice(0, 50)}...` : user.messages.text}
+                </> : 'media'}</Text>
+                <Time>{format(user.messages.createdAt)}</Time>
               </Box>
             ): (
-              // If user.messages doesn't exist or currentMessage doesn't match, render nothing
               <></>
             )
           )}
@@ -92,5 +102,3 @@ export default function Chat({ user, onClick }) {
     </Component>
   );
 }
-
-

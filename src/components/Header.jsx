@@ -3,7 +3,6 @@ import { Box, styled, Avatar } from '@mui/material';
 import InfoDrawer from './chat/InfoDrawer';
 import HeaderMenu from './HeaderMenu';
 import { AccountContext } from '../context/AccountProvider';
-// import GroupsIcon from '@mui/icons-material/Groups';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationModal from './NotificationModal';
@@ -39,10 +38,6 @@ export default function Header() {
   const { userDetails, notification, setSelectedChat, setIsGroupCreate, isGroupCreate } = useContext(AccountContext);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
-  // const toggleDrawer = () => {
-  //   setOpenDrawer(!openDrawer);
-  // };
-
   const handleGroupCreateOpen = () => {
     setIsGroupCreate(!isGroupCreate);
     setSelectedChat();
@@ -52,13 +47,7 @@ export default function Header() {
     setIsNotificationModalOpen(true);
   };
 
-  // const handleGroupsListToggle = () => {
-  //   setGroups(!groups);
-  //   setSelectedChat();
-  // };
-  const handleCLick=()=>{
-    console.log('clicked');
-    <Profile/>
+  const handleCLick = () => {
     setOpenDrawer(!openDrawer);
   }
 
@@ -70,26 +59,22 @@ export default function Header() {
     alt="User Avatar"
     src={`data:image/svg+xml;base64,${userDetails.picture}`}
     style={{
-      width: '40px', // Adjust the width as needed
-      height: '40px', // Adjust the height as needed
-      margin: '0 4px', // Adjust the margins as needed
+      width: '40px',
+      height: '40px',
+      margin: '0 4px',
       cursor: 'pointer',
     }}
     onClick={handleCLick}
   />
 )}
 
-
-{/* {`data:image/svg+xml;base64,${userDetails.picture}`} */}
-
         <Wrapper>
           <GroupAddIcon onClick={handleGroupCreateOpen} />
-          {/* <GroupsIcon onClick={handleGroupsListToggle} /> */}
           
           <Badge
   badgeContent={notification.length}
   color="primary"
-  sx={{ padding:'0px'}} // Adjust the margins as needed
+  sx={{ padding: '0px' }}
 >
   <NotificationsIcon onClick={handleNotificationIconClick} />
 </Badge>

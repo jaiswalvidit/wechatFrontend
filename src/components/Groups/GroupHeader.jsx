@@ -24,13 +24,14 @@ const GroupHeaderWrapper = styled("div")({
   borderRadius: "8px",
   zIndex:'2',
   marginBottom: "16px",
-  height:'10vh'
+  height:'auto',
 });
 
 const GroupName = styled(Typography)({
   fontSize: "1.5rem",
   fontWeight: "bold",
   marginBottom: "8px",
+  color: "#333",
 });
 
 const GroupInfo = styled("div")({
@@ -61,13 +62,12 @@ const GroupHeader = () => {
   const [selectedUsersForAddition, setSelectedUsersForAddition] = useState([]);
   const [clickedParticipantId, setClickedParticipantId] = useState(null);
   const [availableMembers, setAvailableMembers] = useState([]);
-  // const [changed, isChanged] = useState(false);
 
   useEffect(() => {
     
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:8001/api/users");
+        const response = await fetch("https://wechatbackend-qlpp.onrender.com/api/users");
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -167,7 +167,7 @@ const GroupHeader = () => {
   };
 
   const handleAddMember = (userId) => {
-    setSelectedUsersForAddition((prevUsers) => new Set([...prevUsers, userId]));
+    setSelectedUsersForAddition((prevUsers) => [...prevUsers, userId]);
     setSelectedUsersForDeletion([]);
   };
 
@@ -178,7 +178,7 @@ const GroupHeader = () => {
     try {
       const response = await addMembers({
         groupId: selectedChat._id,
-        usersToAdd: Array.from(selectedUsersForAddition),
+        usersToAdd: selectedUsersForAddition,
       });
       setSelectedUsersForDeletion([]);
       setSelectedUsersForAddition([]);
@@ -243,6 +243,7 @@ const GroupHeader = () => {
               >
                 Delete selected Users
               </Button>
+              {/* {availableMembers.length} */}
               {availableMembers.length ? (
                 <>
                   {" "}
@@ -262,7 +263,7 @@ const GroupHeader = () => {
                     color="primary"
                     onClick={handleAdd}
                   >
-                    Add
+                    Add more buttons
                   </Button>
                 </>
               ) : (

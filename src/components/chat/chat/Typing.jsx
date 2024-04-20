@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Box, InputBase } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
-import { Box, InputBase } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import styled from "@emotion/styled";
 import { uploadFile } from "../../../services/api";
-import SendIcon from "@mui/icons-material/Send";
 import Lottie from 'react-lottie';
 import animationData from "../animations/typing.json";
 import Picker from 'emoji-picker-react';
@@ -17,24 +17,27 @@ const Container = styled(Box)`
   padding: 10px 15px;
   background: #f0f0f0;
   width: 90%;
-  // position: fixed;
   bottom: 0;
   left: 0;
+  height: auto;
+  min-height: 10vh;
 `;
 
 const EmojiContainer = styled(Box)`
-  position: relative;
+  position: absolute;
+  align-self: flex-end; // Adjust for any vertical misalignment
+  marginLeft:20px;
 `;
 
 const InputContainer = styled(Box)`
   border-radius: 18px;
   background-color: #ffffff;
-  width: calc(100% - 70px);
+  width: calc(100% - 100px); // Adjust width for better responsiveness
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 5px 10px;
   border: 1px solid #ccc;
+  margin: 0 10px; // Add some margin for spacing
 `;
 
 const InputField = styled(InputBase)`
@@ -48,20 +51,13 @@ const RotatedAttachIcon = styled(AttachFileIcon)`
 `;
 
 export default function Typing({
-  sendText,
-  isTyping,
-  setFile,
-  file,
-  newMessage,
-  typingHandler,
-  setImage,
-  setNewMessage
+  sendText, isTyping, setFile, file, newMessage, typingHandler, setImage, setNewMessage
 }) {
   const { selectedChat } = useContext(AccountContext) ?? {};
   const [showPicker, setShowPicker] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
-    const emoji = event?.emoji ?? '';
+    const emoji = event.emoji;
     setNewMessage(prevInput => prevInput + emoji);
     setShowPicker(false); 
   };
@@ -69,39 +65,45 @@ export default function Typing({
   const onFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile);
-    
     setNewMessage(selectedFile?.name);
   };
 
   useEffect(() => {
-    const getImage = async () => {
-      if (file) {
-        const data = new FormData();
-        data.append("name", file.name);
-        data.append("file", file);
+    if (file) {
+      const data = new FormData();
+      data.append("name", file.name);
+      data.append("file", file);
+      const uploadImage = async () => {
         try {
           const response = await uploadFile(data);
-          console.log(response,'ok');
           setImage(response);
         } catch (error) {
           console.error("Error uploading file:", error);
         }
-      }
-    };
-    getImage();
+      };
+      uploadImage();
+    }
   }, [file, setImage]);
 
   return (
     <Container>
       <EmojiContainer>
+        {showPicker && (
+          <Picker 
+            onEmojiClick={onEmojiClick}
+            pickerStyle={{ position: 'absolute', bottom: '40px', right: '0' }}
+          />
+        )}
+        
         <EmojiEmotionsOutlinedIcon 
-          style={{ color: "#666", cursor: "pointer" }} 
+          style={{ color: "#666", cursor: "pointer",marginBottom:'10px' }}
           onClick={() => setShowPicker(val => !val)}
         />
-        {showPicker && <Picker onEmojiClick={onEmojiClick} />}
       </EmojiContainer>
       <label htmlFor="fileInput">
-        <RotatedAttachIcon style={{ cursor: "pointer" }} />
+       
+       
+        <RotatedAttachIcon style={{ cursor: "pointer",marginLeft:'30px'}} />
       </label>
       <input
         type="file"
@@ -116,14 +118,13 @@ export default function Typing({
           onChange={typingHandler}
           onKeyDown={sendText}
           value={newMessage}
-          type="text"
         />
         <SendIcon
           style={{ color: "#00aaff", cursor: "pointer" }}
-          onClick={() => sendText({ key: 'Enter' })} 
+          onClick={() => sendText({ key: 'Enter' })}
         />
       </InputContainer>
-      {selectedChat?.isGroup && <MicIcon style={{ color: "#666" }} />}
+      {selectedChat?.isGroup && <MicIcon style={{ color: "#666", margin: "0 10px" }} />}
     </Container>
   );
 }

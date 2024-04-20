@@ -49,7 +49,7 @@ const Text = styled(Typography)`
 
 const Time = styled(Typography)`
   font-size: 10px;
-  color: #fff;
+  color:grey;
   margin-left: 5px; 
 `;
 
@@ -322,16 +322,18 @@ export default function Messages() {
                           marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 10,
                           borderRadius: "20px",
                           padding: "10px 15px",
-                          maxWidth: "75%",
+                          // maxWidth: "75%",
+                          wordBreak:'break-word',
+                          maxWidth:'60%',
                         }}
                       > 
-                        <div style={{display:'flex'}}>
+                        <div>
                           <Text>
                             {m.type === 'file' ? 
                               <ImageMessage message={m}/>
                               : m.text}
                           </Text>
-                          <Time>{format(m.createdAt)}</Time>
+                          <Time style={{display:'flex',justifyContent:'end'}}>{format(m.createdAt)}</Time>
                         </div>
                       </span>
                     </MessageContainer>
