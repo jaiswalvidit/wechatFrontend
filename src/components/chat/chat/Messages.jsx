@@ -89,6 +89,7 @@ export default function Messages() {
       });
 
       socket.on("message received", (newMessageReceived) => {
+        console.log('received')
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
@@ -114,17 +115,18 @@ export default function Messages() {
     }
   }, [socket, userDetails, selectedChat, notification, setActiveUsers, setNotification]);
 
-  const fetchData = async () => {
-    try {
-      const data = await getMessage(selectedChat?._id);
-      setMessages(data?.message);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
+  
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMessage(selectedChat?._id);
+        setMessages(data?.message);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
     if (selectedChat) {
       fetchData();
       socket?.emit("join chat",selectedChat?._id);
@@ -133,6 +135,7 @@ export default function Messages() {
   }, [selectedChat, socket]);
 
   useEffect(() => {
+
     const conversationContainer = document.getElementById("conversation-container");
     if (conversationContainer) {
       conversationContainer.scrollTop = conversationContainer.scrollHeight;
