@@ -7,6 +7,8 @@ import { Box, Typography } from '@mui/material';
 export default function GroupItem({ group, onClick }) {
   const [user, setUser] = useState(null);
   const { currentMessage, notification } = useContext(AccountContext);
+  const [groupedNotifications, setGroupedNotifications] = useState({});
+
   console.log(notification);
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,52 +25,55 @@ export default function GroupItem({ group, onClick }) {
   }, [group.messages]);
 
   useEffect(() => {
-    const groupedNotifications = groupNotificationsByMessageId(notification);
-    console.log(groupedNotifications);
+    const groupNotificationsByMessageId = notifications => {
+      return notifications.reduce((acc, notification) => {
+        const groupId = notification.messageId._id;
+        acc[groupId] = acc[groupId] || [];
+        acc[groupId].push(notification);
+        return acc;
+      }, {});
+    };
+    const groupedNotifs = groupNotificationsByMessageId(notification);
+    setGroupedNotifications(groupedNotifs);
   }, [notification]);
-
-  const groupNotificationsByMessageId = notifications => {
-    return notifications.reduce((acc, notification) => {
-      const groupId = notification.messageId._id;
-      acc[groupId] = acc[groupId] || [];
-      acc[groupId].push(notification);
-      return acc;
-    }, {});
-  };
 
   return (
     <div onClick={onClick} style={styles.container}>
-      <Typography variant="h5" style={styles.heading}>{group.group}</Typography>
+      <Typography variant="h5" style={styles.heading}>
+        {group.group}
+      </Typography>
       <Box style={styles.infoContainer}>
-        <Typography><span style={styles.label}>Admin:</span> {group.admin.name}</Typography>
-        <Typography><span style={styles.label}>Members:</span>
+        <Typography>
+          <span style={styles.label}>Admin:</span> {group.admin.name}
+        </Typography>
+        <Typography>
+          <span style={styles.label}>Members:</span>
           {group.users.map((participant, index) => (
             <span key={index} style={styles.participant}>
-              {participant.name}{index !== group.users.length - 1 ? ', ' : ''}
+              {participant.name}
+              {index !== group.users.length - 1 ? ', ' : ''}
             </span>
           ))}
         </Typography>
       </Box>
-          
-      {
-  notification.map((notif) => {
-    return notif._id;
-  })
-}
+      {groupedNotifications[group._id].length}
+      {groupedNotifications[group._id]?.map((notif, index) => (
+        <Typography key={index}>{notif.messageId.text}</Typography>
+      ))}
 
       {currentMessage && currentMessage.messageId === group._id ? (
-        <Box style={{ display: 'flex', justifyContent: "space-between" }}>
+        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography>{currentMessage.text}</Typography>
           <Typography>{format(currentMessage.createdAt)}</Typography>
         </Box>
-      ) : (
-        group.messages ? (
-          <Box style={{ display: 'flex', justifyContent: "space-between" }}>
-            <Typography>{group.messages.type === 'text' ? group.messages.text : 'Media'}</Typography>
-            <Typography>{format(group.messages.createdAt)}</Typography>
-          </Box>
-        ) : null
-      )}
+      ) : group.messages ? (
+        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography>
+            {group.messages.type === 'text' ? group.messages.text : 'Media'}
+          </Typography>
+          <Typography>{format(group.messages.createdAt)}</Typography>
+        </Box>
+      ) : null}
     </div>
   );
 }
