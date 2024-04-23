@@ -21,7 +21,7 @@ const Component = styled(Box)({
   display: "flex",
   flexDirection: "row",
   borderRadius:'1 rem',
-  margin:0,
+  marginLeft:'-10px',
   '@media (max-width: 600px)': {
     flexDirection: "column",
   }
@@ -107,7 +107,7 @@ export default function ChatDialog() {
       <Component>
         {isSmallDevice ? (
           showRightComponent ? (
-            <Right>
+            <Right style={{margin:'0px'}}>
               <BackButton variant="contained" onClick={() => setShowRightComponent(false)}><ArrowBackIcon/></BackButton>
               {
                 selectedChat && selectedChat.isGroupChat === false ?

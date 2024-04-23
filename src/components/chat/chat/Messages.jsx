@@ -59,6 +59,7 @@ export default function Messages() {
     groupDetails,
     selectedChat,
     setActiveUsers,
+    activeUsers,
     notification,
     setNotification,
     currentMessage,
@@ -205,7 +206,7 @@ export default function Messages() {
       }
     }
   };
-
+  console.log(activeUsers,'active users');
   const ImageMessage = ({ message }) => {
 
     return (
