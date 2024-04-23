@@ -11,8 +11,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 
 const Own = styled(Box)({
   position: "relative",
-  background: "#4caf50", // Green background for own messages
-  maxWidth: "70%", // Adjust as necessary
+  background: "#4caf50", 
+  maxWidth: "70%", 
   marginLeft: "auto",
   marginRight: "10px",
   padding: "10px",
