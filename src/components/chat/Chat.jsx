@@ -73,7 +73,7 @@ export default function Chat({ user, onClick }) {
       <MessageContainer>
         <Box style={{ display: 'flex', alignItems: 'center' }}>
           <Name>{other.name}</Name>
-          <Time>{format(user.messages.createdAt)}</Time>
+          {/* <Time>{format(user.messages.createdAt)}</Time> */}
           {messages && messages.timestamp && (
             <Time>{format(user.messages.timestamp)}</Time>
           )}
