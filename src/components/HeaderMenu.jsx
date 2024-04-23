@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "@mui/system/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
+import { AccountContext } from "../context/AccountProvider";
 
 // Define a styled icon using the styled function from MUI
 const StyledMoreVertIcon = styled(MoreVertIcon)`
@@ -20,6 +21,7 @@ const StyledMoreVertIcon = styled(MoreVertIcon)`
 export default function HeaderMenu({ setOpenDrawer }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const { socket, userDetails, setActiveUsers } = useContext(AccountContext);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +29,15 @@ export default function HeaderMenu({ setOpenDrawer }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    socket.emit("logout", userDetails._id, (newActiveUsers) => {
+      setActiveUsers(newActiveUsers);
+      console.log(newActiveUsers);
+    });
+    handleClose();
+    navigate("/auth/login");
   };
 
   return (
@@ -57,14 +68,7 @@ export default function HeaderMenu({ setOpenDrawer }) {
           Profile
         </MenuItem>
         <Divider />
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            navigate("/auth/login");
-          }}
-        >
-          Logout
-        </MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </>
   );

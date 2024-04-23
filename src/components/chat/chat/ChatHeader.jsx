@@ -64,7 +64,7 @@ export default function ChatHeader() {
       <UserInfo>
         <Text variant="subtitle1">{person?.name}</Text>
         <Name color={activeUsers?.some(user => user.user === person._id) ? '#4CAF50' : '#F44336'}> 
-          {activeUsers?.some(user => user.user === person._id) ? 'Online' : 'Offline'}
+          {activeUsers?.some(user => user === person._id) ? 'Online' : 'Offline'}
         </Name>
       </UserInfo>
       <StyledIconBox>

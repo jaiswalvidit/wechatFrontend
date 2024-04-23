@@ -6,8 +6,7 @@ import Typing from "./Typing";
 import { getMessage, newMessages, uploadFile } from "../../../services/api";
 import animationData from "../animations/typing.json";
 import { ArrowBack } from "@mui/icons-material";
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser} from "./miscelleanous";
-import { io } from "socket.io-client";
+import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from "./miscelleanous";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format, download } from "../utils";
@@ -55,12 +54,11 @@ const Time = styled(Typography)`
 export default function Messages() {
   const {
     userDetails,
-    
+    socket,
     selectedChat,
     setActiveUsers,
     notification,
     setNotification,
-    
     setCurrentMessage
   } = useContext(AccountContext);
   const [messages, setMessages] = useState([]);
@@ -71,31 +69,18 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const selectedChatCompare = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
-  const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
-  const [socket, setSocket] = useState(null);
-  const [socketConnected, setSocketConnected] = useState(false);
-
-  useEffect(() => {
-    const newSocket = io(ENDPOINT);
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [ENDPOINT]);
 
   useEffect(() => {
     if (socket) {
       socket.on("connect", () => {
         socket.emit("setup", userDetails);
-        setSocketConnected(true);
       });
 
       socket.on("typing", () => {
         setIsTyping(true);
       });
 
-      socket.on("active users", (users) => {
+      socket.on("activeUsers", (users) => {
         setActiveUsers(users);
       });
 
@@ -104,24 +89,18 @@ export default function Messages() {
       });
 
       socket.on("message received", (newMessageReceived) => {
-        console.log(newMessageReceived,'received');
-        console.log(selectedChatCompare.current,'ok')
         if (
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
         ) {
-         
-
           if (!notification.includes(newMessageReceived)) {
-            console.log('already have');
             if (!newMessageReceived?.messageId?.isGroupChat)
-            toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
-          else
-            toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
+              toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
+            else
+              toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
             setNotification([newMessageReceived, ...notification]);
           }
         } else {
-          console.log('got it ');
           setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
         }
       });
@@ -133,7 +112,7 @@ export default function Messages() {
         socket.off("message received");
       };
     }
-  }, [socket, userDetails, selectedChat, notification,setActiveUsers,setNotification]);
+  }, [socket, userDetails, selectedChat, notification, setActiveUsers, setNotification]);
 
   const fetchData = async () => {
     try {
@@ -151,7 +130,7 @@ export default function Messages() {
       socket?.emit("join chat",selectedChat?._id);
       selectedChatCompare.current = selectedChat;
     }
-  }, [selectedChat,socket]);
+  }, [selectedChat, socket]);
 
   useEffect(() => {
     const conversationContainer = document.getElementById("conversation-container");
@@ -206,39 +185,36 @@ export default function Messages() {
   };
 
   const ImageMessage = ({ message }) => {
-
     return (
-        <div style={{ position: 'relative' }}>
-          
-            {
-                message?.text?.includes('.pdf') ?
-                    <div style={{ display: 'flex' }}>
-                        <img src={iconPDF} alt="pdf-icon" style={{ width: 80 }} />
-                        <Typography style={{ fontSize: 14 }} >{message.text.split("/").pop()}</Typography>
-                    </div>
-                : 
-                    <img style={{ width: "100%", height: 'auto', maxHeight: 200 }} src={message.text} alt={message.text} />
-            }
-            <Time style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                <GetAppIcon 
-                    onClick={(e) => download(e, message.text)} 
-                    fontSize='small' 
-                    style={{ marginRight: 10, border: '1px solid grey', borderRadius: '50%' }} 
-                />
-              
-            </Time>
-        </div>
+      <div style={{ position: 'relative' }}>
+        {
+          message?.text?.includes('.pdf') ?
+          <div style={{ display: 'flex' }}>
+            <img src={iconPDF} alt="pdf-icon" style={{ width: 80 }} />
+            <Typography style={{ fontSize: 14 }} >{message.text.split("/").pop()}</Typography>
+          </div>
+          :
+          <img style={{ width: "100%", height: 'auto', maxHeight: 200 }} src={message.text} alt={message.text} />
+        }
+        <Time style={{ position: 'absolute', bottom: 0, right: 0 }}>
+          <GetAppIcon
+            onClick={(e) => download(e, message.text)}
+            fontSize='small'
+            style={{ marginRight: 10, border: '1px solid grey', borderRadius: '50%' }}
+          />
+        </Time>
+      </div>
     )
-}
-  
+  }
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
 
-    if (!socketConnected) return;
+    if (!socket) return;
 
     if (!typing) {
       setTyping(true);
-      socket?.emit("typing",selectedChat?._id);
+      socket.emit("typing",selectedChat?._id);
     }
 
     let timer;
@@ -246,7 +222,7 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      socket?.emit("stop typing",selectedChat?._id);
+      socket.emit("stop typing",selectedChat?._id);
       setTyping(false);
     }, delay);
   };
