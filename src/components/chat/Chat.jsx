@@ -7,18 +7,16 @@ import { otherMember } from "./chat/miscelleanous";
 const Component = styled(Box)({
   display: "flex",
   height: "auto",
-  padding: "13px 5px",
+  padding: "15px 5px",
   cursor: "pointer",
   border: "1px solid #ccc",
   borderRadius: "5px",
-  margin: '4px',
+  margin: '2px 0px',
   backgroundColor: "#f9f9f9",
   "&:hover": {
     backgroundColor: "#e9e9e9",
   },
-  '@media (max-width:600px)': {
-    flexDirection: "column",
-  }
+  
 });
 
 const Image = styled(Avatar)({
@@ -75,8 +73,9 @@ export default function Chat({ user, onClick }) {
       <MessageContainer>
         <Box style={{ display: 'flex', alignItems: 'center' }}>
           <Name>{other.name}</Name>
+          <Time>{format(user.messages.createdAt)}</Time>
           {messages && messages.timestamp && (
-            <Time>{format(messages.timestamp)}</Time>
+            <Time>{format(user.messages.timestamp)}</Time>
           )}
         </Box>
         <MessageText>
@@ -90,7 +89,7 @@ export default function Chat({ user, onClick }) {
                 <Text> {user.messages.type === 'text' ? <>
                   {user.messages.text.length > 50 ? `${user.messages.text.slice(0, 50)}...` : user.messages.text}
                 </> : 'media'}</Text>
-                <Time>{format(user.messages.createdAt)}</Time>
+                
               </Box>
             ): (
               <></>

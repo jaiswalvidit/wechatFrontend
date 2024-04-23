@@ -7,7 +7,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationModal from './NotificationModal';
 import Badge from '@mui/material/Badge';
-import Profile from './Profile';
+// import Profile from './Profile';
 
 const Component = styled(Box)({
   height: '10vh',

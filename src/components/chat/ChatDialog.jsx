@@ -21,7 +21,7 @@ const Component = styled(Box)({
   display: "flex",
   flexDirection: "row",
   borderRadius:'1 rem',
-  marginLeft:'-10px',
+  margin:'-2px',
   '@media (max-width: 600px)': {
     flexDirection: "column",
   }
@@ -59,14 +59,14 @@ const BackButton = styled(Button)({
 });
 
 export default function ChatDialog() {
-  const { userDetails, setActiveUsers, socket, selectedChat, groups } = useContext(AccountContext);
+  const { userDetails, setActiveUsers, socket, selectedChat } = useContext(AccountContext);
   const [showRightComponent, setShowRightComponent] = useState(true);
   const [isSmallDevice, setIsSmallDevice] = useState(false);
 
   useEffect(() => {
     if (socket && userDetails) {
-      socket.emit('addUser', userDetails._id);
-      socket.on('getUsers', users => {
+      socket.emit('login', userDetails._id); // Emit login event
+      socket.on('activeUsers', users => {
         setActiveUsers(users);
       });
       socket.on('connect_error', error => {
@@ -103,42 +103,41 @@ export default function ChatDialog() {
 
   return (
     <>
-    <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
-      <Component>
-        {isSmallDevice ? (
-          showRightComponent ? (
-            <Right style={{margin:'0px'}}>
-              <BackButton variant="contained" onClick={() => setShowRightComponent(false)}><ArrowBackIcon/></BackButton>
-              {
-                selectedChat && selectedChat.isGroupChat === false ?
-                <Chatbox /> :
-                <GroupBox />
-              }
-            </Right>
-          ) : (
-            <Left>
-              <Menu />
-            </Left>
-          )
-        ) : (
-          <>
-            <Left>
-              <Menu />
-            </Left>
-            {showRightComponent && (
-              <Right>
-               
+      <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
+        <Component>
+          {isSmallDevice ? (
+            showRightComponent ? (
+              <Right style={{margin:'0px'}}>
+                <BackButton variant="contained" onClick={() => setShowRightComponent(false)}><ArrowBackIcon/></BackButton>
                 {
                   selectedChat && selectedChat.isGroupChat === false ?
                   <Chatbox /> :
                   <GroupBox />
                 }
               </Right>
-            )}
-          </>
-        )}
-      </Component>
-    </Dialog>
+            ) : (
+              <Left>
+                <Menu />
+              </Left>
+            )
+          ) : (
+            <>
+              <Left>
+                <Menu />
+              </Left>
+              {showRightComponent && (
+                <Right>
+                  {
+                    selectedChat && selectedChat.isGroupChat === false ?
+                    <Chatbox /> :
+                    <GroupBox />
+                  }
+                </Right>
+              )}
+            </>
+          )}
+        </Component>
+      </Dialog>
     </>
   );
 }
