@@ -7,7 +7,7 @@ import { Box, Typography } from '@mui/material';
 export default function GroupItem({ group, onClick }) {
   const [user, setUser] = useState(null);
   const { currentMessage, notification } = useContext(AccountContext);
-
+  console.log(notification);
   useEffect(() => {
     const fetchUser = async () => {
       if (!group.messages) return;
@@ -50,6 +50,12 @@ export default function GroupItem({ group, onClick }) {
         </Typography>
       </Box>
           
+      {
+  notification.map((notif) => {
+    return notif._id;
+  })
+}
+
       {currentMessage && currentMessage.messageId === group._id ? (
         <Box style={{ display: 'flex', justifyContent: "space-between" }}>
           <Typography>{currentMessage.text}</Typography>
