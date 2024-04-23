@@ -6,7 +6,7 @@ import { AccountContext } from '../../context/AccountProvider';
 export default function GroupList({ text }) {
   const [groups, setGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
-  const { userDetails, setSelectedChat } = useContext(AccountContext);
+  const { userDetails, setSelectedChat,notification,setNotification } = useContext(AccountContext);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -33,6 +33,9 @@ export default function GroupList({ text }) {
 
   const handleGroupClick = group => {
     setSelectedChat(group);
+    notification = notification.filter(notif => notif.messageId !== group._id);
+    setNotification(notification);
+
   };
 
   return (
