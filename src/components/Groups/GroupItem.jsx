@@ -56,9 +56,10 @@ export default function GroupItem({ group, onClick }) {
           ))}
         </Typography>
       </Box>
-      {/* {groupedNotifications[group._id].length} */}
-      {groupedNotifications[group._id]?.map((notif, index) => (
-        <Typography key={index}>{notif.text}</Typography>
+      
+      {groupedNotifications[group._id] && groupedNotifications[group._id].length > 0 &&
+        groupedNotifications[group._id].map((notif, index) => (
+          <Typography key={index}>{notif.text}</Typography>
       ))}
 
       {currentMessage && currentMessage.messageId === group._id ? (
