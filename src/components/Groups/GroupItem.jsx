@@ -27,7 +27,7 @@ export default function GroupItem({ group, onClick }) {
   useEffect(() => {
     const groupNotificationsByMessageId = notifications => {
       return notifications.reduce((acc, notification) => {
-        const groupId = notification.messageId._id;
+        const groupId = notification.messageId?._id;
         acc[groupId] = acc[groupId] || [];
         acc[groupId].push(notification);
         return acc;
@@ -57,7 +57,7 @@ export default function GroupItem({ group, onClick }) {
         </Typography>
       </Box>
       
-      {groupedNotifications[group._id] && groupedNotifications[group._id].length > 0 &&
+      {groupedNotifications[group._id]?.length > 0 &&
         groupedNotifications[group._id].map((notif, index) => (
           <Typography key={index}>{notif.text}</Typography>
       ))}
