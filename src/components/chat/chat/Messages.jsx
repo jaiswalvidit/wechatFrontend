@@ -91,8 +91,8 @@ export default function Messages() {
       socket.on("message received", (newMessageReceived) => {
         
         if (
-          !selectedChatCompare.current ||
-          selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id ||selectedChat._id===undefined
+          
+          selectedChat._id !== newMessageReceived?.messageId?._id 
         ) {
           if (!notification.includes(newMessageReceived)) {
             if (!newMessageReceived?.messageId?.isGroupChat)
