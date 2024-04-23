@@ -9,7 +9,6 @@ export default function GroupItem({ group, onClick }) {
   const { currentMessage, notification } = useContext(AccountContext);
   const [groupedNotifications, setGroupedNotifications] = useState({});
 
-  console.log(notification);
   useEffect(() => {
     const fetchUser = async () => {
       if (!group.messages) return;
@@ -56,9 +55,24 @@ export default function GroupItem({ group, onClick }) {
           ))}
         </Typography>
       </Box>
-      {groupedNotifications[group._id]?.length > 0 && groupedNotifications[group._id]?.length }
-{groupedNotifications[group._id]?.length > 0 &&
-  groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.text} 
+
+      {groupedNotifications[group._id]?.length > 0 && (
+  <span style={{ borderRadius: '5px', backgroundColor: '#e5e5e5', padding: '5px' }}>
+    {groupedNotifications[group._id]?.length}
+  </span>
+)}
+
+      {groupedNotifications[group._id]?.length > 0 && (
+        <>
+          <Typography>
+            {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.senderId.name}
+          </Typography>
+          <Typography>
+            {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.text} 
+            {format(groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].createdAt)}
+          </Typography>
+        </>
+      )}
 
       {currentMessage && currentMessage.messageId === group._id ? (
         <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
