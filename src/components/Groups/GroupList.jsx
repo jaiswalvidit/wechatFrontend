@@ -33,7 +33,7 @@ export default function GroupList({ text }) {
 
   const handleGroupClick = group => {
     setSelectedChat(group);
-    notification = notification.filter(notif => notif.messageId !== group._id);
+    notification = notification.filter(notif => notif.messageId._id !== group._id);
     setNotification(notification);
 
   };
