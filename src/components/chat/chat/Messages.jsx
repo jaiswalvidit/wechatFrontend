@@ -4,10 +4,9 @@ import { Avatar, Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
 import Typing from "./Typing";
 import { getMessage, newMessages, uploadFile } from "../../../services/api";
-import Message from "./Message";
 import animationData from "../animations/typing.json";
 import { ArrowBack } from "@mui/icons-material";
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, otherMember } from "./miscelleanous";
+import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser} from "./miscelleanous";
 import { io } from "socket.io-client";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,13 +55,12 @@ const Time = styled(Typography)`
 export default function Messages() {
   const {
     userDetails,
-    groupDetails,
+    
     selectedChat,
     setActiveUsers,
-    activeUsers,
     notification,
     setNotification,
-    currentMessage,
+    
     setCurrentMessage
   } = useContext(AccountContext);
   const [messages, setMessages] = useState([]);
@@ -135,7 +133,7 @@ export default function Messages() {
         socket.off("message received");
       };
     }
-  }, [socket, userDetails, selectedChat, notification]);
+  }, [socket, userDetails, selectedChat, notification,setActiveUsers,setNotification]);
 
   const fetchData = async () => {
     try {
@@ -153,7 +151,7 @@ export default function Messages() {
       socket?.emit("join chat",selectedChat?._id);
       selectedChatCompare.current = selectedChat;
     }
-  }, [selectedChat]);
+  }, [selectedChat,socket]);
 
   useEffect(() => {
     const conversationContainer = document.getElementById("conversation-container");
@@ -206,7 +204,7 @@ export default function Messages() {
       }
     }
   };
-  console.log(activeUsers,'active users');
+
   const ImageMessage = ({ message }) => {
 
     return (
