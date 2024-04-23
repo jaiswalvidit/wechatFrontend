@@ -33,6 +33,7 @@ const AccountProvider = ({ children }) => {
 
     newSocket.on("activeUsers", (users) => {
       setActiveUsers(users);
+      console.log(activeUsers);
       console.log(users,'users are');
     });
 

@@ -80,18 +80,19 @@ export default function Messages() {
         setIsTyping(true);
       });
 
-      socket.on("activeUsers", (users) => {
-        setActiveUsers(users);
-      });
+      // socket.on("activeUsers", (users) => {
+      //   setActiveUsers(users);
+      // });
 
       socket.on("stop typing", () => {
         setIsTyping(false);
       });
 
       socket.on("message received", (newMessageReceived) => {
+        
         if (
           !selectedChatCompare.current ||
-          selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
+          selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id ||selectedChat._id===undefined
         ) {
           if (!notification.includes(newMessageReceived)) {
             if (!newMessageReceived?.messageId?.isGroupChat)
@@ -114,17 +115,18 @@ export default function Messages() {
     }
   }, [socket, userDetails, selectedChat, notification, setActiveUsers, setNotification]);
 
-  const fetchData = async () => {
-    try {
-      const data = await getMessage(selectedChat?._id);
-      setMessages(data?.message);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
+ 
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMessage(selectedChat?._id);
+        setMessages(data?.message);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
     if (selectedChat) {
       fetchData();
       socket?.emit("join chat",selectedChat?._id);
