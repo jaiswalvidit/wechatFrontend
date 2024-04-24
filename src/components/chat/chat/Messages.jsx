@@ -103,7 +103,7 @@ export default function Messages() {
       socket.on("stop typing", () => {
         setIsTyping(false);
       });
-
+      console.log('called');
       socket.on("message received", (newMessageReceived) => {
         console.log(newMessageReceived,'received');
         console.log(selectedChatCompare.current,'ok')
