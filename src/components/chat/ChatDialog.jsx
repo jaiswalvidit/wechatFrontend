@@ -59,7 +59,7 @@ const BackButton = styled(Button)({
 });
 
 export default function ChatDialog() {
-  const { userDetails, setActiveUsers, socket, selectedChat } = useContext(AccountContext);
+  const { userDetails, setActiveUsers, socket, selectedChat, notification, setNotification } = useContext(AccountContext);
   const [showRightComponent, setShowRightComponent] = useState(true);
   const [isSmallDevice, setIsSmallDevice] = useState(false);
 
@@ -101,6 +101,26 @@ export default function ChatDialog() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  socket.on("message received", (newMessageReceived) => {
+    console.log(newMessageReceived,'received');
+    
+    if (
+      
+      selectedChat._id !== newMessageReceived?.messageId?._id
+    ) {
+     
+
+      if (!notification.includes(newMessageReceived)) {
+        console.log('already have');
+        // if (!newMessageReceived?.messageId?.isGroupChat)
+        // toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
+      // else
+        // toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
+        setNotification([newMessageReceived, ...notification]);
+      }
+    } 
+  });
   return (
     <>
       <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
