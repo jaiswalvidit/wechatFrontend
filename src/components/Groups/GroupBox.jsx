@@ -17,7 +17,7 @@ export default function GroupBox() {
     <>
 
 {(!selectedChat || Object.keys(selectedChat).length === 0) ? (
-        <EmptyChat />
+        <Messages />
       ) : (
         <>
         {/* {selectedChat.isGroupChat} */}

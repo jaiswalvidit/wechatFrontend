@@ -52,6 +52,30 @@ const AccountProvider = ({ children }) => {
     };
   }, [userDetails]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("message received", (newMessageReceived) => {
+        console.log(newMessageReceived,'received');
+        
+        if (
+          selectedChat._id!==newMessageReceived.messageId._id
+        ) {
+          if (!notification.includes(newMessageReceived)) {
+            console.log('already have');
+            // if (!newMessageReceived?.messageId?.isGroupChat)
+              // toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
+            // else
+              // toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
+            setNotification([newMessageReceived, ...notification]);
+          }
+        } else {
+          console.log('got it ');
+          // setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
+        }
+      });
+    }
+  }, [socket, notification]);
+
   return (
     <AccountContext.Provider
       value={{
