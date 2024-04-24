@@ -20,7 +20,8 @@ export default function Chatbox() {
           <Messages  style={{height:'80%',backgroundColor:'black'}}  />
         </Box>
       )}
-      {!person && <EmptyChat />}
+      
+      {!person && <Messages />}
     </>
   );
 }

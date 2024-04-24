@@ -111,14 +111,12 @@ export default function Messages() {
           !selectedChatCompare.current ||
           selectedChatCompare.current?._id !== newMessageReceived?.messageId?._id
         ) {
-         
-
           if (!notification.includes(newMessageReceived)) {
             console.log('already have');
             if (!newMessageReceived?.messageId?.isGroupChat)
-            toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
-          else
-            toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
+              toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
+            else
+              toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
             setNotification([newMessageReceived, ...notification]);
           }
         } else {
@@ -134,7 +132,7 @@ export default function Messages() {
         socket.off("message received");
       };
     }
-  }, [socket, userDetails, selectedChat, notification]);
+  }, [socket, userDetails, notification]);
 
   const fetchData = async () => {
     try {
