@@ -15,19 +15,20 @@ export default function Profile() {
   });
 
   const BookWrapper = styled(Box)({
-    background: '#FFFFFF',
-    padding: '12px 30px', // Adjusted padding
-    boxShadow: '0px 1px 3px rgba(0,0,0,0.08)',
-    fontSize: '13px',
-    color: '#009688',
-    fontWeight: '600',
+    background: '#f5f5f5', // Changed background color
+    padding: '12px 20px', // Adjusted padding
+    border: '1px solid #e0e0e0', // Added border
+    borderRadius: '8px', // Added border radius
+    fontSize: '16px', // Increased font size
+    color: '#000000', // Changed text color
+    fontWeight: 'bold', // Changed font weight
   });
 
   const Description = styled(Box)({
-    padding: '0 30px', // Adjusted padding
+    padding: '0 20px', // Adjusted padding
     '& > p': {
-      fontSize: '13px',
-      color: '#8686ab',
+      fontSize: '14px', // Adjusted font size
+      color: '#616161', // Changed text color
     }
   });
 
@@ -39,7 +40,7 @@ export default function Profile() {
     <>
       <ImageContainer>
         {userDetails?.picture && (
-          <Avatar alt="Profile Picture" src={`data:image/svg+xml;base64,${userDetails.picture}`} sx={{ width: 200, height: 200 }} />
+          <Avatar alt="Profile Picture" src={`data:image/svg+xml;base64,${userDetails.picture}`} sx={{ width: 150, height: 150 }} />
         )}
       </ImageContainer>
       <BookWrapper>
@@ -48,11 +49,11 @@ export default function Profile() {
       <Description>
         <Typography>This is not your username or password</Typography>
       </Description>
-      <Box sx={{ padding: '0 30px', marginBottom: '20px' }}> {/* Adjusted padding and added margin bottom */}
+      <Box sx={{ padding: '0 20px', marginBottom: '20px' }}> {/* Adjusted padding and added margin bottom */}
         <Typography>About:</Typography>
         <Typography>When opportunity gives you a chance, take it.</Typography>
       </Box>
-      <Button variant="contained" onClick={handleEditProfile} sx={{ margin: '0 30px' }}> {/* Adjusted margin */}
+      <Button variant="contained" onClick={handleEditProfile} sx={{ margin: '0 20px' }}> {/* Adjusted margin */}
         Edit Profile
       </Button>
     </>

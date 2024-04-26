@@ -4,6 +4,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
+import { useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AccountContext } from "../context/AccountProvider";
 
@@ -18,9 +19,18 @@ const StyledMoreVertIcon = styled(MoreVertIcon)`
   }
 `;
 
+// Define a styled MenuItem that is responsive
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '100%', // Full width on small screens
+  }
+}));
+
 export default function HeaderMenu({ setOpenDrawer }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isSmallDevice = useMediaQuery(theme.breakpoints.down('sm'));
   const { socket, userDetails, setActiveUsers } = useContext(AccountContext);
 
   const handleClick = (event) => {
@@ -59,14 +69,15 @@ export default function HeaderMenu({ setOpenDrawer }) {
           horizontal: "right",
         }}
       >
-        <MenuItem
+        <StyledMenuItem
           onClick={() => {
             handleClose();
             setOpenDrawer(true);
           }}
+          sx={{ width: isSmallDevice ? '100%' : 'auto' }} // Ensure it takes full width only on small devices
         >
           Profile
-        </MenuItem>
+        </StyledMenuItem>
         <Divider />
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
