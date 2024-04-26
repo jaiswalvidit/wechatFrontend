@@ -1,17 +1,20 @@
-import { Box, List, ListItemText, Typography } from '@mui/material';
+import { Box, List, ListItemText, Typography, CircularProgress } from '@mui/material';
 import GroupItem from './GroupItem';
 import { getGroups } from '../../services/api';
 import { useContext, useEffect, useState } from 'react';
 import { AccountContext } from '../../context/AccountProvider';
+
 export default function GroupList({ text }) {
   const [groups, setGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
-  const { userDetails, setSelectedChat,notification,setNotification } = useContext(AccountContext);
+  const [loading, setLoading] = useState(true); // State for loading indicator
+  const { userDetails, setSelectedChat, notification, setNotification } = useContext(AccountContext);
 
   useEffect(() => {
     const fetchGroups = async () => {
       if (!userDetails || !userDetails._id) {
         console.log('User details are empty or incomplete.');
+        setLoading(false); // Stop loading indicator if userDetails are not available
         return;
       }
       try {
@@ -25,6 +28,8 @@ export default function GroupList({ text }) {
         }
       } catch (error) {
         console.error('Failed to fetch groups:', error);
+      } finally {
+        setLoading(false); // Stop loading indicator after fetching groups
       }
     };
 
@@ -33,8 +38,7 @@ export default function GroupList({ text }) {
 
   const handleGroupClick = group => {
     setSelectedChat(group);
-    setNotification((prev) => prev.filter((n) => n.messageId._id !== group._id));
-
+    setNotification(prev => prev.filter(n => n.messageId._id !== group._id));
   };
 
   return (
@@ -42,19 +46,25 @@ export default function GroupList({ text }) {
       <Typography variant="h6" sx={{ color: 'primary.main', padding: '8px', fontWeight: 'medium' }}>
         Groups:
       </Typography>
-      <List>
-        {filteredGroups.length === 0 ? (
-          <ListItemText primary="No groups found" sx={{ textAlign: 'center', color: 'text.secondary' }} />
-        ) : (
-          filteredGroups.map(group => (
-            <GroupItem
-              key={group._id}
-              group={group}
-              onClick={() => handleGroupClick(group)}
-            />
-          ))
-        )}
-      </List>
+      {loading ? ( // Render loading indicator while fetching groups
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <List>
+          {filteredGroups.length === 0 ? (
+            <ListItemText primary="No groups found" sx={{ textAlign: 'center', color: 'text.secondary' }} />
+          ) : (
+            filteredGroups.map(group => (
+              <GroupItem
+                key={group._id}
+                group={group}
+                onClick={() => handleGroupClick(group)}
+              />
+            ))
+          )}
+        </List>
+      )}
     </Box>
   );
 }

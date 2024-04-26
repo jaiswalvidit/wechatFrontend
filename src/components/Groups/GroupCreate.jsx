@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { TextField, Typography, CircularProgress, Modal, Box, Checkbox, FormControlLabel, Button, Select, MenuItem, Chip } from '@mui/material'; // Import Chip component
+import { TextField, Typography, CircularProgress, Modal, Box, Button, Select, MenuItem, Chip, Paper } from '@mui/material';
+import { Add as AddIcon, CheckCircleOutline as CheckCircleOutlineIcon } from '@mui/icons-material';
 import { addChat } from '../../services/api';
 import { AccountContext } from '../../context/AccountProvider';
 import { toast } from 'react-toastify';
@@ -13,6 +14,7 @@ export default function GroupCreate() {
   const [searchText, setSearchText] = useState('');
   const { userDetails } = useContext(AccountContext);
   const [openModal, setOpenModal] = useState(false);
+  const [selectOpen, setSelectOpen] = useState(false); // State to control the Select component's open state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,13 +23,10 @@ export default function GroupCreate() {
         const response = await fetch("https://wechatbackend-qlpp.onrender.com/api/users");
         if (!response.ok) throw new Error("Failed to fetch user data");
         const userData = await response.json();
-        console.log('userdata', userData);
-        const filteredUserData = userData.users.filter(user => user._id !== userDetails._id); // Exclude admin
+        const filteredUserData = userData.users.filter(user => user._id !== userDetails._id);
         setUsers(filteredUserData);
-        console.log(filteredUserData);
         setError(null);
       } catch (error) {
-
         console.error('Error fetching user data:', error.message);
         setError('Failed to fetch user data. Please try again later.');
       } finally {
@@ -48,20 +47,18 @@ export default function GroupCreate() {
 
     const data = {
       group: groupName,
-      users: participants.map(participant => participant._id), // Extract participant IDs
+      users: participants.map(participant => participant._id),
       admin: userDetails._id,
-      isGroupChat:true
+      isGroupChat: true
     };
 
     try {
       const response = await addChat(data);
 
-      console.log(response);
       if (!response) {
-        
-        throw new Error('Failed to create group',error.message);
+        throw new Error('Failed to create group');
       }
-      // setSelectedChat(response.newChat);
+
       setGroupName('');
       setParticipants([]);
       setError(null);
@@ -75,59 +72,67 @@ export default function GroupCreate() {
     }
   };
 
-  const handleToggleParticipant = (userId) => {
-    const selectedUser = users.find(user => user._id === userId);
-    if (participants.find(participant => participant._id === userId)) {
-      setParticipants(participants.filter(participant => participant._id !== userId));
-    } else {
-      setParticipants([...participants, selectedUser]);
-    }
+  const handleChangeParticipants = (event) => {
+    setParticipants(event.target.value);
   };
 
   const filteredUsers = users.filter(user => user.name.toLowerCase().includes(searchText.toLowerCase()));
 
-  const handleUserClick = (userId) => {
-    const selectedUser = users.find(user => user._id === userId);
-    if (!participants.find(participant => participant._id === userId)) {
-      setParticipants([...participants, selectedUser]);
-    }
-  };
-
   return (
-    <div>
+    <Box p={3}>
       <Typography variant="h5" gutterBottom>
         Create a New Group
       </Typography>
-      <TextField
-        label="Group Name"
-        variant="outlined"
-        value={groupName}
-        onChange={(e) => setGroupName(e.target.value)}
-        fullWidth
-        margin="normal"
-        error={!!error && !groupName.trim()}
-        helperText={!!error && !groupName.trim() ? error : ''}
-      />
-      <TextField
-        label="Search Participants"
-        variant="outlined"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
-      <ul>
-        {filteredUsers.map((user) => (
-          <li key={user._id}>
-            <FormControlLabel
-              control={<Checkbox checked={participants.find(participant => participant._id === user._id)} onChange={() => handleToggleParticipant(user._id)} />}
-              label={user.name}
-              onClick={() => handleUserClick(user._id)} // Add onClick handler
-            />
-          </li>
-        ))}
-      </ul>
-      <Button variant="contained" onClick={() => setOpenModal(true)}>
+      <Paper elevation={3} sx={{ p: 3, marginBottom: 2 }}>
+        <TextField
+          label="Group Name"
+          variant="outlined"
+          value={groupName}
+          onChange={(e) => setGroupName(e.target.value)}
+          fullWidth
+          error={!!error && !groupName.trim()}
+          helperText={error && !groupName.trim() && error}
+        />
+      </Paper>
+      <Paper elevation={3} sx={{ p: 3, marginBottom: 2 }}>
+        <TextField
+          label="Search Participants"
+          variant="outlined"
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+            setSelectOpen(!!e.target.value); // Open Select if there is text in the search field
+          }}
+          fullWidth
+        />
+        <Select
+          multiple
+          value={participants}
+          onChange={handleChangeParticipants}
+          open={selectOpen} // Control the open state of the Select component
+          onClose={() => setSelectOpen(false)} // Close the Select when clicking outside
+          fullWidth
+          variant="outlined"
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {selected.map((value) => (
+                <Chip key={value._id} label={value.name} style={{ margin: 2 }} />
+              ))}
+            </Box>
+          )}
+        >
+          {filteredUsers.map((user) => (
+            <MenuItem key={user._id} value={user}>
+              {user.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Paper>
+      <Button
+        variant="contained"
+        onClick={() => setOpenModal(true)}
+        startIcon={<AddIcon />}
+      >
         Create Group
       </Button>
       <Modal
@@ -136,43 +141,43 @@ export default function GroupCreate() {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90%', maxWidth: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
           <Typography variant="h6" id="modal-title" gutterBottom>
             Select Participants
           </Typography>
           {loading ? (
-            <CircularProgress />
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
           ) : (
             <>
               <Select
                 multiple
-                value={participants.map(participant => participant._id)}
-                onChange={(e) => setParticipants(e.target.value)}
+                value={participants}
+                onChange={handleChangeParticipants}
                 fullWidth
                 variant="outlined"
-                label="Participants"
                 renderValue={(selected) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                     {selected.map((value) => (
-                      <Chip key={value} label={users.find(user => user._id === value)?.name} style={{ margin: 2 }} />
+                      <Chip key={value._id} label={value.name} style={{ margin: 2 }} />
                     ))}
                   </Box>
                 )}
               >
                 {filteredUsers.map((user) => (
-                  <MenuItem key={user._id} value={user._id}>
-                    <Checkbox checked={participants.some(participant => participant._id === user._id)} />
+                  <MenuItem key={user._id} value={user}>
                     {user.name}
                   </MenuItem>
                 ))}
               </Select>
-              <Button variant="contained" onClick={handleCreateGroup} disabled={loading}>
+              <Button variant="contained" onClick={handleCreateGroup} disabled={loading} startIcon={<CheckCircleOutlineIcon />}>
                 Create Group
               </Button>
             </>
           )}
         </Box>
       </Modal>
-    </div>
+    </Box>
   );
 }
