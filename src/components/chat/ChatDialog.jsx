@@ -90,7 +90,7 @@ export default function ChatDialog() {
               <BackButton  onClick={() => setShowRightComponent(false)}>
                 <ArrowBackIcon />
               </BackButton>
-              {selectedChat?.isGroupChat==='true' ? <GroupBox /> : <Chatbox />}
+              {selectedChat===undefined?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
             </Right>
           ) : (
             <Left>
@@ -102,7 +102,7 @@ export default function ChatDialog() {
             <Left><Menu /></Left>
             {showRightComponent && (
               <Right>
-                {selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
+                {selectedChat===undefined?<></>:  selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
               </Right>
             )}
           </>
