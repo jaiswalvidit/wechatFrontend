@@ -60,7 +60,7 @@ export default function ChatHeader() {
   console.log('users',activeUsers);
   return (
     <Component>
-      <StyledAvatar src={`data:image/svg+xml;base64,${person.picture}`} alt={person?.name} />
+      <StyledAvatar src={`data:image/svg+xml;base64,${person?.picture}`} alt={person?.name} />
       <UserInfo>
         <Text variant="subtitle1">{person?.name}</Text>
         <Name color={activeUsers?.some(user => user === person._id) ? '#4CAF50' : '#F44336'}> 

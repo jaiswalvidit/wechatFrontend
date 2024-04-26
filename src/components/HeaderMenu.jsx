@@ -22,9 +22,10 @@ const StyledMoreVertIcon = styled(MoreVertIcon)`
 // Define a styled MenuItem that is responsive
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
-    width: '100%', // Full width on small screens
+    width: '100%', // Full width on screens smaller than 'sm' (600px)
   }
 }));
+
 
 export default function HeaderMenu({ setOpenDrawer }) {
   const [anchorEl, setAnchorEl] = useState(null);

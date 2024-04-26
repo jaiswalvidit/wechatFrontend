@@ -19,7 +19,7 @@ import Lottie from "react-lottie";
 const Wrapper = styled(Box)`
   background-size: 80%;
   object-fit: contain;
-  height: 100vh;
+  height: 72vh;
   display: flex;
   flex-direction: column;
 `;

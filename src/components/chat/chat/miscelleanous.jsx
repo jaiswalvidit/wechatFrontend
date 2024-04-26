@@ -1,6 +1,10 @@
 export const otherMember = (selectedChat, userDetails) => {
-  if (selectedChat.isGroupChat)
+  if(selectedChat===undefined)
+  return;
+  console.log(selectedChat);
+  if (selectedChat?.isGroupChat)
       return;
+    console.log(selectedChat);
   const list = selectedChat.users;
   // console.log("List of users:", list);
   if(list === undefined)

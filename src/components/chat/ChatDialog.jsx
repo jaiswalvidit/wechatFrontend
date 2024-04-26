@@ -78,7 +78,7 @@ export default function ChatDialog() {
   }, []);
 
   useEffect(() => {
-    setShowRightComponent(selectedChat && Object.keys(selectedChat).length !== 0 && selectedChat.isGroupChat !== undefined);
+    setShowRightComponent(selectedChat && Object.keys(selectedChat).length !== 0 && selectedChat?.isGroupChat !== undefined);
   }, [selectedChat]);
 
   return (
@@ -90,7 +90,7 @@ export default function ChatDialog() {
               <BackButton  onClick={() => setShowRightComponent(false)}>
                 <ArrowBackIcon />
               </BackButton>
-              {selectedChat.isGroupChat ? <GroupBox /> : <Chatbox />}
+              {selectedChat?.isGroupChat==='true' ? <GroupBox /> : <Chatbox />}
             </Right>
           ) : (
             <Left>
@@ -102,7 +102,7 @@ export default function ChatDialog() {
             <Left><Menu /></Left>
             {showRightComponent && (
               <Right>
-                {selectedChat.isGroupChat ? <GroupBox /> : <Chatbox />}
+                {selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
               </Right>
             )}
           </>
