@@ -98,14 +98,14 @@ export default function ChatDialog() {
             </Left>
           )
         ) : (
-          <>
-            <Left><Menu /></Left>
+          <Box style={{display:'flex',flexDirection:'space-between'}}>
+            <Left ><Menu /></Left>
             {showRightComponent && (
               <Right>
                 {selectedChat===undefined?<></>:  selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
               </Right>
             )}
-          </>
+          </Box>
         )}
       </Component>
     </Box>

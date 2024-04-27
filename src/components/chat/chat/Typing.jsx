@@ -16,7 +16,10 @@ const Container = styled(Box)`
   align-items: center;
   padding: 10px 15px;
   background: #f0f0f0;
-  width: 90%;
+  width: 80%;
+  margin:auto;
+  margin-top:2px;
+  border-radius:20px;
   bottom: 0;
   left: 0;
   height: auto;
