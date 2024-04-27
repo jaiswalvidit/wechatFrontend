@@ -87,7 +87,7 @@ export default function ChatDialog() {
         {isSmallDevice ? (
           showRightComponent ? (
             <Right>
-              <BackButton  onClick={() => setShowRightComponent(false)}>
+              <BackButton  onClick={() => setShowRightComponent(false)} style={{position:'absolute'}}>
                 <ArrowBackIcon />
               </BackButton>
               {selectedChat===undefined?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}

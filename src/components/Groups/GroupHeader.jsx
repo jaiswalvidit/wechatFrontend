@@ -22,9 +22,7 @@ const GroupHeaderWrapper = styled("div")({
   backgroundColor: "#f0f0f0",
   padding: "16px",
   borderRadius: "8px",
-  zIndex:'2',
   marginBottom: "16px",
-  height:'auto',
 });
 
 const GroupName = styled(Typography)({
@@ -51,6 +49,9 @@ const InfoButton = styled(IconButton)({
 
 const ButtonWrapper = styled("div")({
   marginTop: "16px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
 });
 
 const GroupHeader = () => {
@@ -241,13 +242,11 @@ const GroupHeader = () => {
                 color="secondary"
                 onClick={handleDelete}
               >
-                Delete selected Users
+                Delete Selected Users
               </Button>
-              {/* {availableMembers.length} */}
-              {availableMembers.length ? (
+              {availableMembers.length > 0 && (
                 <>
-                  {" "}
-                  <Typography variant="h6">Add more Members:</Typography>
+                  <Typography variant="h6">Add More Members:</Typography>
                   <List>
                     {availableMembers.map((member) => (
                       <ListItem key={member._id}>
@@ -263,14 +262,13 @@ const GroupHeader = () => {
                     color="primary"
                     onClick={handleAdd}
                   >
-                    Add more buttons
+                    Add More
                   </Button>
                 </>
-              ) : (
-                <></>
               )}
               <Button
-                className="center"
+                variant="outlined"
+                color="primary"
                 onClick={handleLeaveGroup}
               >
                 Leave Group
