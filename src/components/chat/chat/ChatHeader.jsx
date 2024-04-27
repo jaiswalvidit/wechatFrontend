@@ -52,6 +52,7 @@ const Name = styled(Typography)(({ theme, isOnline }) => ({
 export default function ChatHeader() {
   const { activeUsers, selectedChat, userDetails } = useContext(AccountContext);
   const person = otherMember(selectedChat, userDetails);
+  console.log(activeUsers);
   const isOnline = activeUsers?.some(user => user === person?._id);
 
   return (
