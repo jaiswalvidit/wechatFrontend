@@ -73,11 +73,10 @@ export default function ChatDialog() {
 
   useEffect(() => {
     const handleResize = () => setIsSmallDevice(window.innerWidth <= 600);
-    handleResize(); // Call handleResize initially to set the initial state
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   useEffect(() => {
     setShowRightComponent(selectedChat && Object.keys(selectedChat).length !== 0 && selectedChat?.isGroupChat !== undefined);
   }, [selectedChat]);
@@ -88,10 +87,10 @@ export default function ChatDialog() {
         {isSmallDevice ? (
           showRightComponent ? (
             <Right>
-              <BackButton  onClick={() => setShowRightComponent(false)} style={{position:'absolute'}}>
+              <BackButton  onClick={() => setShowRightComponent(false)}>
                 <ArrowBackIcon />
               </BackButton>
-              {selectedChat===undefined ?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
+              {selectedChat===undefined?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
             </Right>
           ) : (
             <Left>
@@ -99,14 +98,14 @@ export default function ChatDialog() {
             </Left>
           )
         ) : (
-          <Box style={{display:'flex',flexDirection:'space-between'}}>
-            <Left ><Menu /></Left>
+          <>
+            <Left><Menu /></Left>
             {showRightComponent && (
               <Right>
                 {selectedChat===undefined?<></>:  selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
               </Right>
             )}
-          </Box>
+          </>
         )}
       </Component>
     </Box>
