@@ -78,7 +78,8 @@ export default function ChatDialog() {
   }, []);
 
   useEffect(() => {
-    setShowRightComponent(selectedChat && Object.keys(selectedChat).length !== 0 && selectedChat?.isGroupChat !== undefined);
+    console.log(selectedChat);
+    setShowRightComponent(selectedChat && Object.keys(selectedChat).length !== 0 );
   }, [selectedChat]);
 
   return (
@@ -87,7 +88,7 @@ export default function ChatDialog() {
         {isSmallDevice ? (
           showRightComponent ? (
             <Right>
-              <BackButton  onClick={() => setShowRightComponent(false)}>
+              <BackButton  onClick={() => setShowRightComponent(false)} style={{zIndex:'10',marginBottom:'45px'}}>
                 <ArrowBackIcon />
               </BackButton>
               {selectedChat===undefined?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}

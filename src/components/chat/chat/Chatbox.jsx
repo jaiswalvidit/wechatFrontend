@@ -17,7 +17,8 @@ export default function Chatbox() {
       {person && (
         <Box>
           <ChatHeader />
-          <Messages  style={{height:'80%',backgroundColor:'black'}}  />
+          <Messages style={{height:'90vh !important', backgroundColor:'black '}} />
+
         </Box>
       )}
       {!person && <EmptyChat />}

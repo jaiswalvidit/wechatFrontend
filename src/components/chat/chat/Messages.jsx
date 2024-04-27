@@ -5,6 +5,7 @@ import { AccountContext } from "../../../context/AccountProvider";
 import Typing from "./Typing";
 import { getMessage, newMessages, uploadFile } from "../../../services/api";
 import Message from "./Message";
+import { useNavigate } from 'react-router-dom';
 import animationData from "../animations/typing.json";
 import { ArrowBack } from "@mui/icons-material";
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, otherMember } from "./miscelleanous";
@@ -15,11 +16,13 @@ import { format, download } from "../utils";
 import { GetApp as GetAppIcon } from '@mui/icons-material';
 import { iconPDF } from "../../../constants/data";
 import Lottie from "react-lottie";
+// import { useHistory}  from "react-router-dom";
+
 
 const Wrapper = styled(Box)`
   background-size: 80%;
   object-fit: contain;
-  height: 72vh;
+  height: 82vh;
   display: flex;
   flex-direction: column;
 `;
@@ -62,8 +65,11 @@ export default function Messages() {
     notification,
     setNotification,
     currentMessage,
+    setSelectedChat,
     setCurrentMessage
   } = useContext(AccountContext);
+  // const history = useHistory();
+
   const [messages, setMessages] = useState([]);
   const [file, setFile] = useState(null);
   const [image, setImage] = useState("");
@@ -75,7 +81,7 @@ export default function Messages() {
   const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
@@ -229,7 +235,7 @@ export default function Messages() {
         </div>
     )
 }
-  
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
 
@@ -263,11 +269,7 @@ export default function Messages() {
           justifyContent={{ base: "space-between" }}
           alignItems="center"
         >
-          <IconButton
-            sx={{ display: { base: "flex", md: "none" } }}
-          >
-            <ArrowBack />
-          </IconButton>
+        
           <Typography>
             {/* {person ? person.name : groupDetails ? groupDetails.name : ""} */}
           </Typography>

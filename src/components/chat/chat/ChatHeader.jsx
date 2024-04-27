@@ -56,7 +56,8 @@ export default function ChatHeader() {
 
   return (
     <Component>
-      <StyledAvatar src={`data:image/svg+xml;base64,${person?.picture}`} alt={person?.name} />
+
+      <StyledAvatar src={`data:image/svg+xml;base64,${person?.picture}` } alt={person?.name}  style={{marginLeft:'45px'}}/>
       <UserInfo>
         <Text variant="subtitle1">{person?.name}</Text>
         <Name isOnline={isOnline}>

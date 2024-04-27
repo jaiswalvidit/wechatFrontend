@@ -20,15 +20,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 const GroupHeaderWrapper = styled("div")({
   backgroundColor: "#f0f0f0",
-  padding: "16px",
+  padding: "2px 20px",
   borderRadius: "8px",
-  marginBottom: "16px",
+  // height:'10vh',
+  // marginBottom: "16px",
 });
 
 const GroupName = styled(Typography)({
   fontSize: "1.5rem",
   fontWeight: "bold",
   marginBottom: "8px",
+  marginLeft:'40px',
   color: "#333",
 });
 
