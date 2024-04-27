@@ -7,6 +7,7 @@ import { Add as AddIcon, CheckCircleOutline as CheckCircleOutlineIcon } from '@m
 import { addChat } from '../../services/api';
 import { AccountContext } from '../../context/AccountProvider';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function GroupCreate() {
   const [groupName, setGroupName] = useState('');
@@ -15,7 +16,7 @@ export default function GroupCreate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState('');
-  const { userDetails } = useContext(AccountContext);
+  const { userDetails,setSelectedChat,setIsGroupCreate } = useContext(AccountContext);
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function GroupCreate() {
 
     fetchData();
   }, [userDetails]);
-
+  const navigate=useNavigate();
   const handleCreateGroup = async () => {
     if (!groupName.trim() || participants.length === 0) {
       setError('Group name and at least one participant are required.');
@@ -49,11 +50,15 @@ export default function GroupCreate() {
     try {
       const response = await addChat(data);
       if (!response) throw new Error('Failed to create group');
-
+      console.log(response.newChat._id);
       setGroupName('');
       setParticipants([]);
       setError(null);
       setOpenModal(false);
+
+      setSelectedChat(response.newChat);
+      navigate('/');
+      setIsGroupCreate(false);
       toast.success('Group created successfully');
     } catch (error) {
       setError('Failed to create group. Please try again later.');

@@ -10,7 +10,7 @@ import GroupCreate from './Groups/GroupCreate';
 export default function Menu() {
   const [text, setText] = useState('');
   const [showChats, setShowChats] = useState(true); // State to control whether to show chats or groups
-  const { groups,isGroupCreate,setSelectedChat } = useContext(AccountContext);
+  const { groups,isGroupCreate,setSelectedChat,selectedChat } = useContext(AccountContext);
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function Menu() {
 
        <div style={{height:'65vh'}}>
        
-       {showChats ? <Conversations text={text} /> : <GroupList text={text} />}
+       {showChats || (selectedChat && selectedChat.isGroupChat==='true') ? <Conversations text={text} /> : <GroupList text={text} />}
        </div></>:<><GroupCreate/></>}
        
       </Box>

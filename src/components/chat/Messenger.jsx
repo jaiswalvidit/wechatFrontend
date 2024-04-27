@@ -6,6 +6,7 @@ import Login from "../Login";
 
 export default function Messenger() {
   const { userDetails } = useContext(AccountContext);
+console.log(userDetails);
 
   useEffect(() => {
     // Retrieve user details from localStorage

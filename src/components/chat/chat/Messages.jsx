@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Avatar, Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
 import Typing from "./Typing";
-import { getMessage, newMessages, uploadFile } from "../../../services/api";
+import { deleteMessage, getMessage, newMessages, uploadFile } from "../../../services/api";
 import Message from "./Message";
 import { useNavigate } from 'react-router-dom';
 import animationData from "../animations/typing.json";
@@ -255,7 +255,24 @@ export default function Messages() {
       setTyping(false);
     }, delay);
   };
-
+  const handleDeleteMessage = async (messageId, senderId) => {
+    if (userDetails._id === senderId) {
+      try {
+        // Perform deletion on the frontend
+        setMessages(messages.filter(message => message._id !== messageId));
+        console.log('Clicked delete on own message');
+        
+        await deleteMessage(messageId); // Make sure to implement the deleteMessage function in your API service
+      } catch (error) {
+        console.error("Error deleting message:", error);
+        // Handle error (e.g., show error toast)
+      }
+    } else {
+      console.log("Attempt to delete someone else's message prevented.");
+      // Optionally show a message or toast here to inform the user they cannot delete others' messages
+    }
+  };
+  
   return (
     <Wrapper>
       <ConversationContainer id="conversation-container">
@@ -292,9 +309,10 @@ export default function Messages() {
                 {messages.length > 0 &&
                   messages.map((m, i) => (
                     <MessageContainer
-                      key={m._id}
-                      marginBottom={!isSameSender(messages, m, i, userDetails?._id)}
-                    >
+                   
+                    key={m._id}
+                    marginBottom={!isSameSender(messages, m, i, userDetails?._id)}
+                    onClick={() => userDetails._id === m.senderId._id ? handleDeleteMessage(m._id, m.senderId._id) : null}>
                       {(isSameSender(messages, m, i, userDetails?._id) ||
                         isLastMessage(messages, i, userDetails?._id)) && (
                         <Tooltip label={m.senderId.name} placement="bottom-start" hasArrow>

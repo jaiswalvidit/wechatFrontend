@@ -167,7 +167,7 @@ export const addMembers=async(data)=>{
 export const Addpic=async(data)=>{
   console.log(data);
   try {
-    const response=await axios.patch('https://wechatbackend-qlpp.onrender.com/api/users',data);
+    const response=await axios.delete('https://wechatbackend-qlpp.onrender.com/api/users',data);
     console.log(response);
     return response.data;
     
@@ -176,3 +176,16 @@ export const Addpic=async(data)=>{
     throw error;
   }
 }
+export const deleteMessage = async (messageId) => {
+  console.log('Deleting message with ID:', messageId);
+  try {
+    const response = await axios.delete('https://wechatbackend-qlpp.onrender.com/api/message/delete', {
+      data: { messageId }
+    });
+    console.log('Response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error while deleting message:', error);
+    throw error;
+  }
+};

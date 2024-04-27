@@ -11,7 +11,7 @@ export default function Profile() {
   const ImageContainer = styled(Box)({
     display: 'flex', 
     justifyContent: 'center',
-    marginBottom: '20px', // Added margin bottom for spacing
+    marginBottom: '20px', 
   });
 
   const BookWrapper = styled(Box)({
@@ -40,7 +40,7 @@ export default function Profile() {
     <>
       <ImageContainer>
         {userDetails?.picture && (
-          <Avatar alt="Profile Picture" src={`data:image/svg+xml;base64,${userDetails.picture}`} sx={{ width: 150, height: 150 }} />
+          <Avatar alt="Profile Picture" src={`data:image/svg+xml;base64,${userDetails?.picture}`} sx={{ width: 150, height: 150 }} />
         )}
       </ImageContainer>
       <BookWrapper>
