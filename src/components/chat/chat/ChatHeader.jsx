@@ -59,7 +59,7 @@ export default function ChatHeader() {
   // Function to initiate call
   const handleCall = () => {
     // Emit a socket event to initiate the call
-    socket.emit('call', { userId: person._id }); // Assuming the server listens for 'call' events and handles call initiation
+    socket.emit('call', { userId:selectedChat}); // Assuming the server listens for 'call' events and handles call initiation
   }
 
   return (

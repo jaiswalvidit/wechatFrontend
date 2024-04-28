@@ -16,7 +16,7 @@ const AccountProvider = ({ children }) => {
   const [isGroupCreate, setIsGroupCreate] = useState(false);
   const [currentMessage, setCurrentMessage] = useState();
   const [socket, setSocket] = useState(null);
-
+const [incomingCall,setIncomingCall]=useState(null);
   useEffect(() => {
     const newSocket = io("https://wechatbackend-qlpp.onrender.com/", {
       cors: {
@@ -51,6 +51,17 @@ const AccountProvider = ({ children }) => {
       newSocket.disconnect();
     };
   }, [userDetails]);
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("incoming call", (callInfo) => {
+        console.log("Incoming call:", callInfo);
+        // Update the incoming call state with call information
+        setIncomingCall(callInfo);
+      });
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (socket) {
@@ -101,7 +112,8 @@ const AccountProvider = ({ children }) => {
         setNotification,
         currentMessage,
         setCurrentMessage,
-        socket,
+        socket,incomingCall,
+        setIncomingCall
       }}
     >
       {children}
