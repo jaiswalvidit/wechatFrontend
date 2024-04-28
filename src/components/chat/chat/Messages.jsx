@@ -305,59 +305,59 @@ export default function Messages() {
             <Typography>Loading...</Typography>
           ) : (
             <div style={{ overflowY: "auto" }}>
-              <div>
-                {messages.length > 0 &&
-                  messages.map((m, i) => (
-                    <MessageContainer
-                   
-                    key={m._id}
-                    marginBottom={!isSameSender(messages, m, i, userDetails?._id)}
-                    onClick={() => userDetails._id === m.senderId._id ? handleDeleteMessage(m._id, m.senderId._id) : null}>
-                      {(isSameSender(messages, m, i, userDetails?._id) ||
-                        isLastMessage(messages, i, userDetails?._id)) && (
-                        <Tooltip label={m.senderId.name} placement="bottom-start" hasArrow>
-                          <Box
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              marginRight: "8px",
-                            }}
-                          >
-                            <Avatar
-                              src={`data:image/svg+xml;base64,${m.senderId.picture}`}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                            <Title>{m.senderId.name}</Title>
-                          </Box>
-                        </Tooltip>
-                      )}
-                      <span
-                        style={{
-                          backgroundColor: `${
-                            m.senderId._id === userDetails?._id ? "#BEE3F8" : "#B9F5D0"
-                          }`,
-                          marginLeft: isSameSenderMargin(messages, m, i, userDetails?._id),
-                          marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 10,
-                          borderRadius: "20px",
-                          padding: "10px 15px",
-                          // maxWidth: "75%",
-                          wordBreak:'break-word',
-                          maxWidth:'60%',
-                        }}
-                      > 
-                        <div>
-                          <Text>
-                            {m.type === 'file' ? 
-                              <ImageMessage message={m}/>
-                              : m.text}
-                          </Text>
-                          <Time style={{display:'flex',justifyContent:'end'}}>{format(m.createdAt)}</Time>
-                        </div>
-                      </span>
-                    </MessageContainer>
-                  ))}
-              </div>
+  <div>
+    {messages.length > 0 &&
+      messages.map((m, i) => (
+        <MessageContainer
+          key={m._id}
+          marginBottom={!isSameSender(messages, m, i, userDetails?._id)}
+          onClick={() => userDetails._id === m.senderId._id ? handleDeleteMessage(m._id, m.senderId._id) : null}
+        >
+          {(isSameSender(messages, m, i, userDetails?._id) ||
+            isLastMessage(messages, i, userDetails?._id)) && (
+            <Tooltip label={m.senderId.name} placement="bottom-start" hasArrow>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginRight: "8px",
+                }}
+              >
+                <Avatar
+                  src={`data:image/svg+xml;base64,${m.senderId.picture}`}
+                  sx={{ width: 30, height: 30 }}
+                />
+              </Box>
+            </Tooltip>
+          )}
+          <span
+            style={{
+              backgroundColor: `${
+                m.senderId._id === userDetails?._id ? "#BEE3F8" : "#B9F5D0"
+              }`,
+              marginLeft: isSameSenderMargin(messages, m, i, userDetails?._id),
+              marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 10,
+              borderRadius: "20px",
+              padding: "10px 15px",
+              wordBreak:'break-word',
+              maxWidth:'60%',
+            }}
+          > 
+            <div>
+              <Title>{m.senderId.name}</Title>
+              <Text>
+                {m.type === 'file' ? 
+                  <ImageMessage message={m}/>
+                  : m.text}
+              </Text>
+              <Time style={{display:'flex',justifyContent:'end'}}>{format(m.createdAt)}</Time>
             </div>
+          </span>
+        </MessageContainer>
+      ))}
+  </div>
+</div>
+
           )}
         </Box>
         {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}

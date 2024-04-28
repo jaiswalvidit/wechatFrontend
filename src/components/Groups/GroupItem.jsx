@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 
 export default function GroupItem({ group, onClick }) {
   const [user, setUser] = useState(null);
-  const { currentMessage, notification } = useContext(AccountContext);
+  const { currentMessage, notification,userDetails } = useContext(AccountContext);
   const [groupedNotifications, setGroupedNotifications] = useState({});
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function GroupItem({ group, onClick }) {
 
     fetchUser();
   }, [group.messages]);
-
+console.log('current',group);
   useEffect(() => {
     const groupNotificationsByMessageId = notifications => {
       return notifications.reduce((acc, notification) => {
@@ -35,6 +35,8 @@ export default function GroupItem({ group, onClick }) {
     const groupedNotifs = groupNotificationsByMessageId(notification);
     setGroupedNotifications(groupedNotifs);
   }, [notification]);
+
+  const hasNotifications = groupedNotifications[group._id]?.length > 0;
 
   return (
     <div onClick={onClick} style={styles.container}>
@@ -56,37 +58,46 @@ export default function GroupItem({ group, onClick }) {
         </Typography>
       </Box>
 
-      {groupedNotifications[group._id]?.length > 0 && (
-  <span style={{ borderRadius: '5px', backgroundColor: '#e5e5e5', padding: '5px' }}>
-    {groupedNotifications[group._id]?.length}
-  </span>
-)}
+      {hasNotifications && (
+        <span style={styles.notificationBadge}>
+          {groupedNotifications[group._id]?.length}
+        </span>
+      )}
 
-      {groupedNotifications[group._id]?.length > 0 && (
+{groupedNotifications[group._id]?.length}
+{groupedNotifications[group._id]?.length>0 ? (
         <>
           <Typography>
             {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.senderId.name}
           </Typography>
           <Typography>
+          {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId._id === userDetails._id ? "You" : groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId.name}
             {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.text} 
             {format(groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].createdAt)}
           </Typography>
         </>
+      ) : (
+        <>
+        {/* {currentMessage.messageId} */}
+          {currentMessage && currentMessage.messageId._id === group._id ? (
+            <Box style={styles.messageContainer}>
+              <Typography>{currentMessage.senderId._id === userDetails._id ? "You" : currentMessage.senderId.name}
+-{currentMessage.text}</Typography>
+              <Typography>{format(currentMessage.createdAt)}</Typography>
+            </Box>
+          ) : (
+            group.messages ? (
+              <Box style={styles.messageContainer}>
+                <Typography>
+                {group.messages.senderId === userDetails._id ? "You" : group.messages.senderId.name}
+                  {group.messages.type === 'text' ? group.messages.text : 'Media'}
+                </Typography>
+                <Typography>{format(group.messages.createdAt)}</Typography>
+              </Box>
+            ) : null
+          )}
+        </>
       )}
-
-      {currentMessage && currentMessage.messageId === group._id ? (
-        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>{currentMessage.text}</Typography>
-          <Typography>{format(currentMessage.createdAt)}</Typography>
-        </Box>
-      ) : group.messages ? (
-        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>
-            {group.messages.type === 'text' ? group.messages.text : 'Media'}
-          </Typography>
-          <Typography>{format(group.messages.createdAt)}</Typography>
-        </Box>
-      ) : null}
     </div>
   );
 }
@@ -115,5 +126,14 @@ const styles = {
   participant: {
     marginRight: '5px',
     color: '#007bff',
+  },
+  notificationBadge: {
+    borderRadius: '5px',
+    backgroundColor: '#e5e5e5',
+    padding: '5px',
+  },
+  messageContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 };
