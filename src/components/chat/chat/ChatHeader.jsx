@@ -1,16 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Typography, Avatar, styled } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CallIcon from '@mui/icons-material/Call';
 import { AccountContext } from '../../../context/AccountProvider';
 import { otherMember } from './miscelleanous';
+import SimplePeer from 'simple-peer'; // Import WebRTC library
 
 const Component = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-
   padding: theme.spacing(1, 2),
-   backgroundColor: "#f0f0f0",
+  backgroundColor: "#f0f0f0",
   color: 'red',
   borderBottom: `1px solid ${theme.palette.divider}`,
   height: '10vh'
@@ -52,12 +51,20 @@ const Name = styled(Typography)(({ theme, isOnline }) => ({
 export default function ChatHeader() {
   const { activeUsers, selectedChat, userDetails } = useContext(AccountContext);
   const person = otherMember(selectedChat, userDetails);
-  console.log(activeUsers);
   const isOnline = activeUsers?.some(user => user === person?._id);
+  
+  // WebRTC State
+  const [peers, setPeers] = useState([]);
+
+  // Function to initiate call
+  const handleCall = () => {
+    const newPeer = new SimplePeer({ initiator: true }); // Initiator of the call
+    setPeers([...peers, newPeer]);
+    // Additional WebRTC logic to establish connection, handle stream, etc.
+  }
 
   return (
     <Component>
-
       <StyledAvatar src={`data:image/svg+xml;base64,${person?.picture}` } alt={person?.name}  style={{marginLeft:'45px'}}/>
       <UserInfo>
         <Text variant="subtitle1">{person?.name}</Text>
@@ -66,8 +73,7 @@ export default function ChatHeader() {
         </Name>
       </UserInfo>
       <StyledIconBox>
-        <SearchIcon />
-        <MoreVertIcon />
+        <CallIcon onClick={handleCall}/>
       </StyledIconBox>
     </Component>
   );
