@@ -49,7 +49,7 @@ const Name = styled(Typography)(({ theme, isOnline }) => ({
 }));
 
 export default function ChatHeader() {
-  const { activeUsers, selectedChat, userDetails } = useContext(AccountContext);
+  const { activeUsers, selectedChat, userDetails, socket } = useContext(AccountContext); // Assuming socket is provided by AccountProvider
   const person = otherMember(selectedChat, userDetails);
   const isOnline = activeUsers?.some(user => user === person?._id);
   
@@ -58,9 +58,8 @@ export default function ChatHeader() {
 
   // Function to initiate call
   const handleCall = () => {
-    const newPeer = new SimplePeer({ initiator: true }); // Initiator of the call
-    setPeers([...peers, newPeer]);
-    // Additional WebRTC logic to establish connection, handle stream, etc.
+    // Emit a socket event to initiate the call
+    socket.emit('call', { userId: person._id }); // Assuming the server listens for 'call' events and handles call initiation
   }
 
   return (
