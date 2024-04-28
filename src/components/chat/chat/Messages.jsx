@@ -65,7 +65,7 @@ export default function Messages() {
     notification,
     setNotification,
     currentMessage,
-    setSelectedChat,
+    setSelectedChat,setIncomingCall,
     setCurrentMessage
   } = useContext(AccountContext);
   // const history = useHistory();
@@ -139,6 +139,17 @@ export default function Messages() {
       };
     }
   }, [socket, userDetails, notification]);
+
+  
+  useEffect(() => {
+    if (socket) {
+      socket.on("incoming call", (callInfo) => {
+        console.log("Incoming call:", callInfo);
+        // Update the incoming call state with call information
+        setIncomingCall(callInfo);
+      });
+    }
+  }, [socket]);
 
   const fetchData = async () => {
     try {
