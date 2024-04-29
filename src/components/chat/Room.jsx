@@ -67,7 +67,7 @@ const Room = () => {
     return (
         <div>
             <h1>Room</h1>
-            <button onClick={() => startCall(person._id)}>Start Call</button>
+            <button onClick={() => startCall(userDetails._id)}>Start Call</button>
             <video ref={videoRef} playsInline autoPlay style={{ width: '100%' }}></video>
         </div>
     );
