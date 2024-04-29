@@ -182,7 +182,8 @@ export default function Messages() {
 
   const sendText = async (e) => {
     if (e.key === "Enter" && newMessage) {
-      socket.emit("stop typing", selectedChat?._id);
+      socket?.emit("stop typing", { group: selectedChat, userId: userDetails._id });
+
 
       const isGroup = !selectedChat?.members;
       const message = {
@@ -258,7 +259,8 @@ export default function Messages() {
 
     if (!typing) {
       setTyping(true);
-      socket?.emit("typing",selectedChat?._id);
+      socket?.emit("typing", { group: selectedChat, userId: userDetails._id });
+
     }
 
     let timer;
@@ -266,7 +268,8 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      socket?.emit("stop typing",selectedChat?._id);
+      socket?.emit("stop typing", { group: selectedChat, userId: userDetails._id });
+
       setTyping(false);
     }, delay);
   };
