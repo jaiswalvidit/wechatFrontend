@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import io from "socket.io-client";
 
@@ -19,7 +19,7 @@ const AccountProvider = ({ children }) => {
   const [currentMessage, setCurrentMessage] = useState();
   const [socket, setSocket] = useState(null);
 const [incomingCall,setIncomingCall]=useState(null);
-const navigate=useNavigate();
+// const navigate=useNavigate();
 
   useEffect(() => {
     const newSocket = io("https://wechatbackend-qlpp.onrender.com/", {
@@ -64,7 +64,7 @@ const navigate=useNavigate();
         console.log("Incoming call:", callInfo);
         // Update the incoming call state with call information
         setIncomingCall(selectedChat._id);
-        navigate('/room/:selectedChat._id');
+        // navigate('/room/:selectedChat._id');
       });
     }
   }, [socket]);

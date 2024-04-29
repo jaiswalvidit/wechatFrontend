@@ -147,6 +147,7 @@ export default function Messages() {
         console.log("Incoming call:", callInfo);
         // Update the incoming call state with call information
         setIncomingCall(selectedChat._id);
+        navigate('/room:/{selectedchat._id}');
       });
     }
   }, [socket]);
