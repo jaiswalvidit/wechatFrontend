@@ -99,6 +99,7 @@ export default function Messages() {
       });
 
       socket.on("typing", () => {
+        console.log('typing is made');
         setIsTyping(true);
       });
 
@@ -107,6 +108,7 @@ export default function Messages() {
       });
 
       socket.on("stop typing", () => {
+        console.log('typing stopped');
         setIsTyping(false);
       });
       console.log('called');
