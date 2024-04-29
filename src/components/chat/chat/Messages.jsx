@@ -143,12 +143,12 @@ export default function Messages() {
   
   useEffect(() => {
     if (socket) {
-      socket.on("incoming call", (callInfo,selectedChat) => {
-        console.log("Incoming call:", callInfo);
+      socket.on("incoming call", (callInfo,details) => {
+        console.log("Incoming call:", callInfo,details);
         // Update the incoming call state with call information
         setIncomingCall(selectedChat._id);
-        console.log(selectedChat._id);
-        navigate(`/room/${selectedChat._id}`);
+        console.log(details._id);
+        navigate(`/room/${details._id}`);
       });
     }
   }, [socket]);
