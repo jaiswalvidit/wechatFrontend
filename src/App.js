@@ -6,6 +6,7 @@ import AccountProvider from './context/AccountProvider';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import SetAvatar from './components/SetAvatar';
+import Room from './components/chat/Room';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/picture" element={<SetAvatar/>}/>
             <Route path="/" element={<Messenger />} />
-
+            <Route path="/room/:id" element={<Room/>} />
 
             <Route path="/auth/login" element={<Login />} />
 

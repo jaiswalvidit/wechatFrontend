@@ -4,6 +4,7 @@ import CallIcon from '@mui/icons-material/Call';
 import { AccountContext } from '../../../context/AccountProvider';
 import { otherMember } from './miscelleanous';
 import SimplePeer from 'simple-peer'; // Import WebRTC library
+import { useNavigate } from 'react-router-dom';
 
 const Component = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -52,14 +53,15 @@ export default function ChatHeader() {
   const { activeUsers, selectedChat, userDetails, socket } = useContext(AccountContext); // Assuming socket is provided by AccountProvider
   const person = otherMember(selectedChat, userDetails);
   const isOnline = activeUsers?.some(user => user === person?._id);
-  
+  const navigate=useNavigate();
   // WebRTC State
   const [peers, setPeers] = useState([]);
 
   // Function to initiate call
   const handleCall = () => {
     // Emit a socket event to initiate the call
-    socket.emit('call', { userId:selectedChat}); // Assuming the server listens for 'call' events and handles call initiation
+    socket.emit('call', { userId:selectedChat});
+    navigate(`/room/${selectedChat._id}`); // Assuming the server listens for 'call' events and handles call initiation
   }
 
   return (
