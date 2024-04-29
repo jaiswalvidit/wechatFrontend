@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import io from "socket.io-client";
 
 export const AccountContext = createContext(null);
@@ -18,7 +18,7 @@ const AccountProvider = ({ children }) => {
   const [currentMessage, setCurrentMessage] = useState();
   const [socket, setSocket] = useState(null);
 const [incomingCall,setIncomingCall]=useState(null);
-const navigate=useNavigate();
+
   useEffect(() => {
     const newSocket = io("https://wechatbackend-qlpp.onrender.com/", {
       cors: {
@@ -30,7 +30,7 @@ const navigate=useNavigate();
     newSocket.on("connect", () => {
       console.log("Connected to socket.io");
       if (userDetails) {
-        newSocket.emit("login", userDetails._id); // Emit login event
+        newSocket.emit("login", userDetails._id); 
       }
     });
 
@@ -62,7 +62,7 @@ const navigate=useNavigate();
         console.log("Incoming call:", callInfo);
         // Update the incoming call state with call information
         setIncomingCall(callInfo);
-        navigate('/room/:callinfo');
+        // navigate('/room/:callinfo');
       });
     }
   }, [socket]);
@@ -77,15 +77,12 @@ const navigate=useNavigate();
         ) {
           if (!notification.includes(newMessageReceived)) {
             console.log('already have');
-            // if (!newMessageReceived?.messageId?.isGroupChat)
-              // toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
-            // else
-              // toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
+            
             setNotification([newMessageReceived, ...notification]);
           }
         } else {
           console.log('got it ');
-          // setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
+         
         }
       });
     }
