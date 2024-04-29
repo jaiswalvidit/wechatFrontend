@@ -17,16 +17,15 @@ const AccountProvider = ({ children }) => {
   const [isGroupCreate, setIsGroupCreate] = useState(false);
   const [currentMessage, setCurrentMessage] = useState();
   const [socket, setSocket] = useState(null);
-  const [incomingCall, setIncomingCall] = useState(null);
-  
-  const navigate = useNavigate(); // Move useNavigate outside of useEffect
-
+const [incomingCall,setIncomingCall]=useState(null);
+const navigate=useNavigate();
   useEffect(() => {
     const newSocket = io("https://wechatbackend-qlpp.onrender.com/", {
       cors: {
         origin: "https://your-frontend-url.com",
       },
     });
+    
 
     newSocket.on("connect", () => {
       console.log("Connected to socket.io");
@@ -38,7 +37,7 @@ const AccountProvider = ({ children }) => {
     newSocket.on("activeUsers", (users) => {
       setActiveUsers(users);
       console.log(activeUsers);
-      console.log(users, 'users are');
+      console.log(users,'users are');
     });
 
     newSocket.on("connect_error", (error) => {
@@ -56,35 +55,41 @@ const AccountProvider = ({ children }) => {
     };
   }, [userDetails]);
 
+
   useEffect(() => {
     if (socket) {
       socket.on("incoming call", (callInfo) => {
         console.log("Incoming call:", callInfo);
         // Update the incoming call state with call information
         setIncomingCall(callInfo);
-        navigate(`/room/${callInfo}`); // Use dynamic parameter callInfo
+        navigate('/room/:callinfo');
       });
     }
-  }, [socket, navigate]);
+  }, [socket]);
 
   useEffect(() => {
     if (socket) {
       socket.on("message received", (newMessageReceived) => {
-        console.log(newMessageReceived, 'received');
+        console.log(newMessageReceived,'received');
         
         if (
-          selectedChat._id !== newMessageReceived.messageId._id
+          selectedChat._id!==newMessageReceived.messageId._id
         ) {
           if (!notification.includes(newMessageReceived)) {
             console.log('already have');
+            // if (!newMessageReceived?.messageId?.isGroupChat)
+              // toast.success(`Message received from sender ${newMessageReceived?.senderId?.name}`);
+            // else
+              // toast.success(`Message received from group ${newMessageReceived?.messageId?.group}`);
             setNotification([newMessageReceived, ...notification]);
           }
         } else {
           console.log('got it ');
+          // setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
         }
       });
     }
-  }, [socket, notification, selectedChat]);
+  }, [socket, notification]);
 
   return (
     <AccountContext.Provider
@@ -111,8 +116,7 @@ const AccountProvider = ({ children }) => {
         setNotification,
         currentMessage,
         setCurrentMessage,
-        socket,
-        incomingCall,
+        socket,incomingCall,
         setIncomingCall
       }}
     >
