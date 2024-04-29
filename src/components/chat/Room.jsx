@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import SimplePeer from 'simple-peer';
 import { AccountContext } from '../../context/AccountProvider';
+import { otherMember } from './chat/miscelleanous';
 
 const Room = () => {
-    const { socket, userDetails } = useContext(AccountContext);
+    const { socket, userDetails,selectedChat} = useContext(AccountContext);
     const peerRef = useRef(null);
     const videoRef = useRef(null);
-
+    const person = otherMember(selectedChat, userDetails);
     useEffect(() => {
         socket.on('incoming call', data => {
             console.log('Incoming call', data);
@@ -51,7 +52,7 @@ const Room = () => {
         });
 
         peer.on('signal', signal => {
-            socket.emit('call user', { userId, signal });
+            socket.emit('call user', { userId, signal,selectedChat });
         });
 
         peer.on('stream', stream => {
@@ -66,7 +67,7 @@ const Room = () => {
     return (
         <div>
             <h1>Room</h1>
-            <button onClick={() => startCall(userDetails._id)}>Start Call</button>
+            <button onClick={() => startCall(person._id)}>Start Call</button>
             <video ref={videoRef} playsInline autoPlay style={{ width: '100%' }}></video>
         </div>
     );
