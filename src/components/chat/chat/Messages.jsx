@@ -143,10 +143,10 @@ export default function Messages() {
   
   useEffect(() => {
     if (socket) {
-      socket.on("incoming call", (callInfo) => {
+      socket.on("incoming call", (callInfo,selectedChat) => {
         console.log("Incoming call:", callInfo);
         // Update the incoming call state with call information
-        setIncomingCall(callInfo);
+        setIncomingCall(selectedChat._id);
       });
     }
   }, [socket]);
