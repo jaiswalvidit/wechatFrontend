@@ -101,8 +101,8 @@ export default function Messages() {
         setSocketConnected(true);
       });
 
-      socket.on("typing", (userId) => {
-        console.log('typing is made',userId);
+      socket.on("typing", (message) => {
+        console.log('typing is made',message);
         setIsTyping(true);
       });
 
