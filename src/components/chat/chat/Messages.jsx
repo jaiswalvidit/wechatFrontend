@@ -82,6 +82,7 @@ export default function Messages() {
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const navigate = useNavigate();
+  
 
   console.log(selectedChat);
   
@@ -110,9 +111,9 @@ export default function Messages() {
         setActiveUsers(users);
       });
 
-      socket.on("stop typing", () => {
-        console.log('typing stopped');
-        setIsTyping(false);
+      socket.on("stop typing", (list) => {
+        console.log('typing stopped',list);
+        setIsTyping(null);
       });
       console.log('called');
       socket.on("message received", (newMessageReceived) => {
