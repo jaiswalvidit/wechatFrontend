@@ -3,12 +3,11 @@ import React, { useMemo } from "react";
 // Create a context for managing the peer connection
 const PeerContext = React.createContext(null);
 
-
-export const usePeer=()=>{
-    return React.useContext(PeerContext);
-}
 // Define the PeerProvider component
 export const PeerProvider = (props) => {
+    // Destructure user credentials from props
+    const { username, credentials } = props;
+
     // Create a new RTCPeerConnection instance
     const peer = useMemo(() => new RTCPeerConnection({
         iceServers: [
@@ -19,11 +18,11 @@ export const PeerProvider = (props) => {
                     'stun:stun.l.google.com:19302',
                     'turn:global.stun.twilio.com:3478'
                 ],
-               
+                username: username, // Provide username
+                credential: credentials // Provide credentials
             }
         ]
-    }), []);
-
+    }), [username, credentials]); // Include username and credentials in the dependencies array
 
     const createOffer=async()=>{
         const offer=await peer.createOffer();
@@ -42,12 +41,17 @@ export const PeerProvider = (props) => {
     const setRemoteAns=async(ans)=>{
         await peer.setRemoteDescription(ans);
     }
+
     // Provide the peer connection instance through the context
     return (
-        <PeerContext.Provider value={{ peer,createAnswer,createOffer,setRemoteAns }}>
+        <PeerContext.Provider value={{ peer, createAnswer, createOffer, setRemoteAns }}>
             {props.children}
         </PeerContext.Provider>
     );
+};
+
+export const usePeer = () => {
+    return React.useContext(PeerContext);
 };
 
 export default PeerContext; // Export the PeerContext for consuming in other components
