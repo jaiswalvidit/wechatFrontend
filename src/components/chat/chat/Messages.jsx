@@ -77,7 +77,7 @@ export default function Messages() {
   const [typing, setTyping] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const selectedChatCompare = useRef(null);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(null);
   const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
@@ -103,7 +103,7 @@ export default function Messages() {
 
       socket.on("typing", (list) => {
         console.log('typing is made',list);
-        setIsTyping(true);
+        setIsTyping(list);
       });
 
       socket.on("active users", (users) => {
@@ -376,6 +376,9 @@ export default function Messages() {
           </span>
         </MessageContainer>
       ))}
+
+{isTyping && <p>{isTyping} is typing...</p>}
+
   </div>
 </div>
 
