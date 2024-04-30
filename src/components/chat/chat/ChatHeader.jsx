@@ -60,6 +60,8 @@ export default function ChatHeader() {
   // Function to initiate call
   const handleCall = () => {
     // Emit a socket event to initiate the call
+
+    socket.emit("join-roon",{room:selectedChat._id,user:userDetails._id});
     socket.emit('call user', { userId:person._id});
     navigate(`/room/${selectedChat._id}`); // Assuming the server listens for 'call' events and handles call initiation
   }
@@ -74,7 +76,7 @@ export default function ChatHeader() {
         </Name>
       </UserInfo>
       <StyledIconBox>
-        <CallIcon onClick={handleCall}/>
+        {/* <CallIcon onClick={handleCall}/> */}
       </StyledIconBox>
     </Component>
   );

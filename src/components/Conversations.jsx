@@ -15,6 +15,7 @@ const Conversations = ({ text }) => {
   const [error, setError] = useState(null);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const [list, setList] = useState([]);
+  const [refreshPage, setRefreshPage] = useState(false); // State variable to track page refresh
   const { userDetails, setSelectedChat } = useContext(AccountContext);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const Conversations = ({ text }) => {
       }
     };
     fetchData();
-  }, [text, userDetails]);
+  }, [text, userDetails, refreshPage]); // Include refreshPage as a dependency
 
   const handleClick = (user) => {
     setSelectedChat(user);
@@ -56,6 +57,17 @@ const Conversations = ({ text }) => {
     setIsNewChatModalOpen(!isNewChatModalOpen);
   };
 
+  const handleCloseModal = () => {
+    setIsNewChatModalOpen(false);
+    setRefreshPage(true); // Set refreshPage to true when the modal is closed
+  };
+
+  useEffect(() => {
+    if (refreshPage) {
+      setRefreshPage(false); // Reset refreshPage to false after the page is refreshed
+    }
+  }, [refreshPage]);
+
   return (
     <StyledBox>
       <Typography variant="h5" component="h2" mb={2}>
@@ -64,7 +76,7 @@ const Conversations = ({ text }) => {
       <Button variant="contained" color="primary" onClick={handleNewChat} sx={{ mb: 2 }}>
         {isNewChatModalOpen ? "Close Modal" : "Start New Chat"}
       </Button>
-      <NewChatModal open={isNewChatModalOpen} onClose={handleNewChat} list={list}  setList={setList}/>
+      <NewChatModal open={isNewChatModalOpen} onClose={handleCloseModal} list={list}  setList={setList}/>
       {loading && (
         <Box display="flex" justifyContent="center" alignItems="center" height={200}>
           <CircularProgress />
