@@ -22,7 +22,7 @@ export default function GroupItem({ group, onClick }) {
 
     fetchUser();
   }, [group.messages]);
-console.log('current',group);
+// console.log('current',group);
   useEffect(() => {
     const groupNotificationsByMessageId = notifications => {
       return notifications.reduce((acc, notification) => {
