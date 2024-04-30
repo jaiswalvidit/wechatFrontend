@@ -186,7 +186,7 @@ export default function Messages() {
 
   const sendText = async (e) => {
     if (e.key === "Enter" && newMessage) {
-      socket?.emit("stop typing", { group: selectedChat, userId: userDetails._id });
+      socket?.emit("stop typing", { group: selectedChat, userId: userDetails.name });
 
 
       const isGroup = !selectedChat?.members;
@@ -263,7 +263,7 @@ export default function Messages() {
 
     if (!typing) {
       setTyping(true);
-      socket?.emit("typing", { group: selectedChat, userId: userDetails._id });
+      socket?.emit("typing", { group: selectedChat, userId: userDetails.name });
 
     }
 
@@ -272,7 +272,7 @@ export default function Messages() {
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      socket?.emit("stop typing", { group: selectedChat, userId: userDetails._id });
+      socket?.emit("stop typing", { group: selectedChat, userId: userDetails.name });
 
       setTyping(false);
     }, delay);
@@ -378,14 +378,14 @@ export default function Messages() {
         </MessageContainer>
       ))}
 
-{isTyping && <p>{isTyping} is typing...</p>}
+{isTyping && <p> <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />{isTyping} is typing...</p>}
 
   </div>
 </div>
 
           )}
         </Box>
-        {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
+        {/* {isTyping &&} */}
       </ConversationContainer>
       <Typing
         isTyping={isTyping}
