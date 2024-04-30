@@ -10,19 +10,8 @@ export const PeerProvider = (props) => {
 
     // Create a new RTCPeerConnection instance
     const peer = useMemo(() => new RTCPeerConnection({
-        iceServers: [
-            {
-                urls: [
-                    // Add ICE server URLs here
-                    // For example:
-                    'stun:stun.l.google.com:19302',
-                    'turn:global.stun.twilio.com:3478'
-                ],
-                username: username, // Provide username
-                credential: credentials // Provide credentials
-            }
-        ]
-    }), [username, credentials]); // Include username and credentials in the dependencies array
+      
+    }), []); // Include username and credentials in the dependencies array
 
     const createOffer=async()=>{
         const offer=await peer.createOffer();

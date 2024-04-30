@@ -8,11 +8,12 @@ import {
   ListItemIcon,
   Typography,
   Button,
+  Avatar,
 } from "@mui/material";
-import { InfoOutlined, PersonOutline } from "@mui/icons-material"; 
-import { AccountContext } from "../../context/AccountProvider";
+import { InfoOutlined, PersonOutline } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { AccountContext } from "../../context/AccountProvider";
 import { addMembers, deleteGroupUsers } from "../../services/api";
 import { styled } from "@mui/system";
 import { ToastContainer, toast } from "react-toastify";
@@ -22,16 +23,6 @@ const GroupHeaderWrapper = styled("div")({
   backgroundColor: "#f0f0f0",
   padding: "2px 20px",
   borderRadius: "8px",
-  // height:'10vh',
-  // marginBottom: "16px",
-});
-
-const GroupName = styled(Typography)({
-  fontSize: "1.5rem",
-  fontWeight: "bold",
-  marginBottom: "8px",
-  marginLeft:'40px',
-  color: "#333",
 });
 
 const GroupInfo = styled("div")({
@@ -43,6 +34,14 @@ const GroupInfo = styled("div")({
 const GroupAdmin = styled("div")({
   display: "flex",
   alignItems: "center",
+});
+
+const GroupName = styled(Typography)({
+  fontSize: "1.5rem",
+  fontWeight: "bold",
+  marginBottom: "8px",
+  marginLeft: '40px',
+  color: "#333",
 });
 
 const InfoButton = styled(IconButton)({
@@ -67,7 +66,6 @@ const GroupHeader = () => {
   const [availableMembers, setAvailableMembers] = useState([]);
 
   useEffect(() => {
-    
     const fetchUsers = async () => {
       try {
         const response = await fetch("https://wechatbackend-qlpp.onrender.com/api/users");
@@ -75,23 +73,16 @@ const GroupHeader = () => {
           throw new Error("Failed to fetch user data");
         }
         const userData = await response.json();
-        // console.log('data is',userData);
-        // console.log(selectedChat.users);
         setAvailableMembers(
           userData.users.filter((user) => {
             const isAdmin = user._id === selectedChat.admin._id;
             if (isAdmin) {
-              console.log(`User ${user.name} is the admin`);
               return false;
             }
 
             const isParticipant = selectedChat.users.some(
-              (participant) => {
-               
-                return participant._id === user._id;
-              }
+              (participant) => participant._id === user._id
             );
-           
             return !isParticipant;
           })
         );
@@ -120,11 +111,8 @@ const GroupHeader = () => {
         }),
       });
       const data = await response.json();
-      console.log("Leave Group Response:", data);
       if (response.ok) {
         toast.success("Left the group successfully");
-        console.log(response);
-        // Handle any necessary state updates here
       } else {
         toast.error("Failed to leave the group");
       }
@@ -153,10 +141,7 @@ const GroupHeader = () => {
         return;
       }
       const response = await deleteGroupUsers(data);
-      // console.log("group is ", response.group);
-      // console.log("response is", response);
       if (response.ok) {
-        // console.log("success is", response.group);
         toast.success("Selected users are deleted");
       }
       setSelectedChat(response.group);
@@ -175,9 +160,6 @@ const GroupHeader = () => {
   };
 
   const handleAdd = async () => {
-    // console.log("Add clicked");
-    // console.log(selectedUsersForAddition);
-
     try {
       const response = await addMembers({
         groupId: selectedChat._id,
@@ -185,36 +167,43 @@ const GroupHeader = () => {
       });
       setSelectedUsersForDeletion([]);
       setSelectedUsersForAddition([]);
-      console.log("added response ", response.group);
-      console.log(response);
       if (!response.group) {
         throw new Error("Invalid response from server");
       }
-
-      // console.log("group is ", response.group);
       setSelectedChat(response.group);
     } catch (error) {
       console.error("Error occurred while adding members:", error);
     }
   };
 
-  // console.log("selected list addition", selectedUsersForAddition);
-  // console.log("selected list for deletion ", selectedUsersForDeletion);
   return (
     <GroupHeaderWrapper>
       {selectedChat && (
         <>
-          <GroupName variant="h3">{selectedChat.group}</GroupName>
-          <GroupInfo>
-            <GroupAdmin>
-              <ListItemIcon>
-                <PersonOutline />
-              </ListItemIcon>
-              <ListItemText primary={`Admin: ${selectedChat.admin.name}`} />
-            </GroupAdmin>
-            <InfoButton onClick={toggleusers}>
+         <div style={{ display: 'flex', alignItems: 'center' }}>
+  <Avatar alt={selectedChat.admin.name} src={selectedChat.admin.picture} />
+  <div style={{ marginLeft: '16px' }}>
+    <GroupName variant="h3">{selectedChat.group}</GroupName>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {selectedChat.admin.name},
+      {selectedChat.users.map((user, index) => (
+        <React.Fragment key={user._id}>
+          {user.name} {index !== selectedChat.users.length - 1 && ','}
+        </React.Fragment>
+      ))}
+    </div>
+
+  </div>
+  <InfoButton onClick={toggleusers}>
               <InfoOutlined />
             </InfoButton>
+</div>
+
+          <GroupInfo>
+            <GroupAdmin>
+              <ListItemIcon />
+            </GroupAdmin>
+           
           </GroupInfo>
           <Collapse in={showusers} timeout="auto" unmountOnExit>
             <Typography variant="body1">
