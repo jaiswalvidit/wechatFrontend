@@ -14,7 +14,7 @@ import { AccountContext } from "../../../context/AccountProvider";
 const Container = styled(Box)`
   display: flex;
   align-items: center;
-  padding: 10px 15px;
+  padding: 10px 10px;
   background: #f0f0f0;
   width: 80%;
   margin:auto;
@@ -22,8 +22,8 @@ const Container = styled(Box)`
   border-radius:20px;
   bottom: 0;
   left: 0;
-  height: auto;
-  min-height: 10vh;
+  // height: auto;
+  height: 10vh;
 `;
 
 const EmojiContainer = styled(Box)`
@@ -89,7 +89,7 @@ export default function Typing({
   }, [file, setImage]);
 
   return (
-    <Container>
+    <Container >
       <EmojiContainer>
         {showPicker && (
           <Picker 
@@ -99,7 +99,7 @@ export default function Typing({
         )}
         
         <EmojiEmotionsOutlinedIcon 
-          style={{ color: "#666", cursor: "pointer",marginBottom:'10px' }}
+          style={{ color: "#666", cursor: "pointer",marginBottom:'13px' }}
           onClick={() => setShowPicker(val => !val)}
         />
       </EmojiContainer>

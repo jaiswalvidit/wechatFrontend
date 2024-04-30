@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const GroupHeaderWrapper = styled("div")({
+  // marginLeft:'30px',
   backgroundColor: "#f0f0f0",
   padding: "2px 20px",
   borderRadius: "8px",
@@ -180,10 +181,10 @@ const GroupHeader = () => {
     <GroupHeaderWrapper>
       {selectedChat && (
         <>
-         <div style={{ display: 'flex', alignItems: 'center' }}>
-  <Avatar alt={selectedChat.admin.name} src={selectedChat.admin.picture} />
+         <div style={{ display: 'flex', alignItems: 'center',  }}>
+  <Avatar alt={selectedChat.admin.name} src={selectedChat.admin.picture} style={{marginLeft:'30px'}} />
   <div style={{ marginLeft: '16px' }}>
-    <GroupName variant="h3">{selectedChat.group}</GroupName>
+    <GroupName variant="h3" style={{marginLeft:'20px'}}>{selectedChat.group}</GroupName>
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       {selectedChat.admin.name},
       {selectedChat.users.map((user, index) => (

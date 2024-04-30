@@ -22,7 +22,7 @@ import Lottie from "react-lottie";
 const Wrapper = styled(Box)`
   background-size: 80%;
   object-fit: contain;
-  height: 82vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
 `;
@@ -330,19 +330,20 @@ export default function Messages() {
   <div>
     {messages.length > 0 &&
       messages.map((m, i) => (
-        <MessageContainer
+        <MessageContainer 
+        style={{display:'flex'}}
           key={m._id}
           marginBottom={!isSameSender(messages, m, i, userDetails?._id)}
           onClick={() => userDetails._id === m.senderId._id ? handleDeleteMessage(m._id, m.senderId._id) : null}
         >
           {(isSameSender(messages, m, i, userDetails?._id) ||
             isLastMessage(messages, i, userDetails?._id)) && (
-            <Tooltip label={m.senderId.name} placement="bottom-start" hasArrow>
+           
               <Box
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  marginRight: "8px",
+                  // marginRight: "8px",
                 }}
               >
                 <Avatar
@@ -350,14 +351,14 @@ export default function Messages() {
                   sx={{ width: 30, height: 30 }}
                 />
               </Box>
-            </Tooltip>
+           
           )}
           <span
             style={{
               backgroundColor: `${
                 m.senderId._id === userDetails?._id ? "#BEE3F8" : "#B9F5D0"
               }`,
-              marginLeft: isSameSenderMargin(messages, m, i, userDetails?._id),
+              marginLeft: isSameSenderMargin(messages, m, i, userDetails?._id)? 0:'auto',
               marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 5,
               borderRadius: "20px",
               padding: "10px 15px",

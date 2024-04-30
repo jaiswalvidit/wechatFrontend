@@ -41,8 +41,8 @@ const Right = styled(Box)(({ theme }) => ({
 
 const BackButton = styled(Button)({
   position: 'absolute',
-  top: '10px',
-  left: '10px',
+  top: '15px',
+  left: '0px',
 });
 
 export default function ChatDialog() {
@@ -72,7 +72,7 @@ export default function ChatDialog() {
   }, [socket, userDetails._id, setActiveUsers]);
 
   useEffect(() => {
-    const handleResize = () => setIsSmallDevice(window.innerWidth <= 600);
+    const handleResize = () => setIsSmallDevice(window.innerWidth <= 650);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -88,7 +88,7 @@ export default function ChatDialog() {
         {isSmallDevice ? (
           showRightComponent ? (
             <Right>
-              <BackButton  onClick={() => setShowRightComponent(false)} style={{zIndex:'10',marginBottom:'45px'}}>
+              <BackButton  onClick={() => setShowRightComponent(false)} style={{zIndex:'10',marginBottom:'20px'}}>
                 <ArrowBackIcon />
               </BackButton>
               {selectedChat===undefined?<></>: selectedChat?.isGroupChat ? <GroupBox /> : <Chatbox />}
