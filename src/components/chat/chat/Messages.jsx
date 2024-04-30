@@ -82,6 +82,7 @@ export default function Messages() {
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const navigate = useNavigate();
+  
   useEffect(() => {
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
@@ -98,8 +99,8 @@ export default function Messages() {
         setSocketConnected(true);
       });
 
-      socket.on("typing", () => {
-        console.log('typing is made');
+      socket.on("typing", (userId) => {
+        console.log('typing is made',userId);
         setIsTyping(true);
       });
 
@@ -109,6 +110,7 @@ export default function Messages() {
 
       socket.on("stop typing", () => {
         console.log('typing stopped');
+        console.log('typing is made',userId);
         setIsTyping(false);
       });
       console.log('called');
