@@ -1,73 +1,44 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import SimplePeer from 'simple-peer';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { AccountContext } from '../../context/AccountProvider';
-import { otherMember } from './chat/miscelleanous';
+import { usePeer } from './chat/Peer';
 
 const Room = () => {
-    const { socket, userDetails,selectedChat} = useContext(AccountContext);
-    const peerRef = useRef(null);
+    const { socket } = useContext(AccountContext);
     const videoRef = useRef(null);
-    const person = otherMember(selectedChat, userDetails);
+    const { createOffer, createAnswer, setRemoteAns } = usePeer();
+
+    const handleNewUserJoined = useCallback(async (data) => {
+        const { emailId } = data;
+        const offer = await createOffer();
+        socket.emit('call-user', { emailId, offer });
+    }, [createOffer, socket]);
+
+    const handleIncomingCall = useCallback(async (data) => {
+        const { from, offer } = data;
+        const ans = await createAnswer(offer);
+        socket.emit('call-accepted', { from, ans });
+    }, [createAnswer, socket]);
+
+    const handleCallAccepted = useCallback(async (data) => {
+        const { ans } = data;
+        await setRemoteAns(ans);
+    }, [setRemoteAns]);
+
     useEffect(() => {
-        socket.on('incoming call', data => {
-            console.log('Incoming call', data);
-            handleIncomingCall(data);
-        });
+        socket.on('incoming call', handleIncomingCall);
+        socket.on('user-joined', handleNewUserJoined);
+        socket.on('call-accepted', handleCallAccepted);
 
         return () => {
-            if (peerRef.current) {
-                peerRef.current.destroy();
-                peerRef.current = null;
-            }
-            socket.off('incoming call');
+            socket.off('incoming call', handleIncomingCall);
+            socket.off('user-joined', handleNewUserJoined);
+            socket.off('call-accepted', handleCallAccepted);
         };
-    }, [socket]);
-
-    const handleIncomingCall = (data) => {
-        const peer = new SimplePeer({
-            initiator: false,
-            trickle: false,
-            stream: videoRef.current?.srcObject, // Assuming you have your own stream attached
-        });
-
-        peer.on('signal', signal => {
-            socket.emit('accept call', { signal, callerId: data.callerId });
-        });
-
-        peer.on('stream', stream => {
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        });
-
-        peer.signal(data.signal);
-        peerRef.current = peer;
-    };
-
-    const startCall = (userId) => {
-        const peer = new SimplePeer({
-            initiator: true,
-            trickle: false,
-            stream: videoRef.current?.srcObject,
-        });
-
-        peer.on('signal', signal => {
-            socket.emit('call user', { userId, signal,selectedChat });
-        });
-
-        peer.on('stream', stream => {
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        });
-
-        peerRef.current = peer;
-    };
+    }, [handleIncomingCall, handleNewUserJoined, handleCallAccepted, socket]);
 
     return (
         <div>
             <h1>Room</h1>
-            <button onClick={() => startCall(userDetails._id)}>Start Call</button>
             <video ref={videoRef} playsInline autoPlay style={{ width: '100%' }}></video>
         </div>
     );

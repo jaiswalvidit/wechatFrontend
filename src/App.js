@@ -7,14 +7,15 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import SetAvatar from './components/SetAvatar';
 import Room from './components/chat/Room';
+import { PeerProvider } from './components/chat/chat/Peer';
 
 function App() {
   return (
     <>
     <AccountProvider >
-        
+        <PeerProvider>
         <Router>
-
+        
           <Routes>
             <Route path="/picture" element={<SetAvatar/>}/>
             <Route path="/" element={<Messenger />} />
@@ -28,6 +29,7 @@ function App() {
           </Routes>
 
         </Router>
+        </PeerProvider>
       </AccountProvider>
      
 

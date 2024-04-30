@@ -172,7 +172,7 @@ export default function Messages() {
   useEffect(() => {
     if (selectedChat) {
       fetchData();
-      socket?.emit("join chat",selectedChat?._id);
+      // socket?.emit("join chat",selectedChat?._id);
       selectedChatCompare.current = selectedChat;
     }
   }, [selectedChat]);
@@ -358,7 +358,7 @@ export default function Messages() {
                 m.senderId._id === userDetails?._id ? "#BEE3F8" : "#B9F5D0"
               }`,
               marginLeft: isSameSenderMargin(messages, m, i, userDetails?._id),
-              marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 10,
+              marginTop: isSameUser(messages, m, i, userDetails?._id) ? 3 : 5,
               borderRadius: "20px",
               padding: "10px 15px",
               wordBreak:'break-word',
@@ -378,7 +378,12 @@ export default function Messages() {
         </MessageContainer>
       ))}
 
-{isTyping && <p> <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />{isTyping} is typing...</p>}
+{isTyping && (
+  <p style={{ display: 'flex', alignItems: 'center' }}>
+    <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />
+    <span style={{ marginLeft: '10px' }}>{isTyping} is typing...</span>
+  </p>
+)}
 
   </div>
 </div>
