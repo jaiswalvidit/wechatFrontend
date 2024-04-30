@@ -115,7 +115,7 @@ export default function Typing({
         onChange={onFileChange}
       />
       <InputContainer>
-        {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />}
+        {/* {isTyping && <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />} */}
         <InputField
           placeholder="Type a message"
           onChange={typingHandler}

@@ -380,8 +380,8 @@ export default function Messages() {
 
 {isTyping && (
   <p style={{ display: 'flex'}}>
-    <Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />
-    <span style={{ marginLeft: '10px', color:'green' }}>{isTyping} is typing...</span>
+    
+    <span style={{ marginLeft: '10px', color:'green' }}><Lottie options={{ loop: true, autoplay: true, animationData }} width={70} />{isTyping} is typing...</span>
   </p>
 )}
 
