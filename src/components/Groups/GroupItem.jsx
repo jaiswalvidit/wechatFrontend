@@ -75,14 +75,15 @@ export default function GroupItem({ group, onClick }) {
       </Box>
 
       {groupedNotifications[group._id]?.length > 0 ? (
-        <>
-          <Typography style={styles.message}>
-            {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.senderId.name}
-            {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId._id === userDetails._id ? "You" : groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId.name}
+        <Box style={{display:'flex'}}>
+          <Typography >
+            {/* {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.senderId.name} */}
+            {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId._id === userDetails._id ? "You" : groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId.name}-
             {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.text} 
+            </Typography>
             {format(groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].createdAt)}
-          </Typography>
-        </>
+          
+        </Box>
       ) : (
         <>
           {currentMessage && currentMessage.messageId._id === group._id ? (
@@ -97,7 +98,7 @@ export default function GroupItem({ group, onClick }) {
             group.messages ? (
               <Box style={{display:'flex'}}>
                 <>
-                  <Sender>{group.messages.senderId === userDetails._id ? "You" : group.messages.senderId.name}</Sender>-
+                  <Sender>{group.messages.senderId._id === userDetails._id ? "You" : group.messages.senderId.name}</Sender>-
                   {group.messages.type === 'text' ? group.messages.text : 'Media'}
                 </>
                 <Typography style={styles.message}>{format(group.messages.createdAt)}</Typography>
