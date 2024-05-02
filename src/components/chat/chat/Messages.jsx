@@ -66,7 +66,7 @@ export default function Messages() {
     setNotification,
     currentMessage,
     setSelectedChat,setIncomingCall,
-    setCurrentMessage
+    setCurrentMessage,isTyping,setIsTyping
   } = useContext(AccountContext);
   // const history = useHistory();
 
@@ -77,7 +77,7 @@ export default function Messages() {
   const [typing, setTyping] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const selectedChatCompare = useRef(null);
-  const [isTyping, setIsTyping] = useState(null);
+  // const [isTyping, setIsTyping] = useState(null);
   const ENDPOINT = "https://wechatbackend-qlpp.onrender.com/";
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);

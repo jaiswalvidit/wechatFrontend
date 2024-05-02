@@ -19,6 +19,7 @@ const AccountProvider = ({ children }) => {
   const [currentMessage, setCurrentMessage] = useState();
   const [socket, setSocket] = useState(null);
 const [incomingCall,setIncomingCall]=useState(null);
+const [isTyping,setIsTyping]=useState(null);
 // const navigate=useNavigate();
 
   useEffect(() => {
@@ -117,6 +118,7 @@ const [incomingCall,setIncomingCall]=useState(null);
         setCurrentMessage,
         socket,incomingCall,
         setIncomingCall
+        ,isTyping,setIsTyping
       }}
     >
       {children}

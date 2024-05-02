@@ -4,20 +4,19 @@ import { AccountContext } from "../../context/AccountProvider";
 import { format } from "./utils";
 import { otherMember } from "./chat/miscelleanous";
 
-const Component = styled(Box)({
+const Component = styled(Box)(({ theme }) => ({
   display: "flex",
   height: "auto",
   padding: "15px 5px",
   cursor: "pointer",
   border: "1px solid #ccc",
   borderRadius: "5px",
-  margin: '2px 0px',
-  backgroundColor: "#f9f9f9",
-  "&:hover": {
-    backgroundColor: "#e9e9e9",
+  margin: '2px 0',
+  backgroundColor: theme.palette.background.default,
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
   },
-  
-});
+}));
 
 const Image = styled(Avatar)({
   width: "50px",
@@ -32,25 +31,21 @@ const MessageContainer = styled(Box)({
   flexGrow: 1,
 });
 
-const MessageText = styled(Typography)({
-  color: "#333",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap", // Changed to 'nowrap' to display content that fits in one row
-  maxWidth: "70%",
-  marginBottom: "5px",
-  display: "block",
-  display: "-webkit-box",
-  WebkitLineClamp: 1,
-  WebkitBoxOrient: "vertical",
-  wordBreak: "break-word",
-});
+const MessageText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontSize: '0.875rem',
+  lineHeight: '1.35em',
+  maxWidth: '100%',
+  overflowY: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap', // ensures no wrap and text overflow is handled
+}));
 
-const Time = styled(Box)({
+const Time = styled(Box)(({ theme }) => ({
   marginLeft: "auto",
-  fontSize: "0.75rem", // Reduced font size
-  color: "#777",
-});
+  fontSize: "0.75rem",
+  color: theme.palette.text.secondary,
+}));
 
 const Name = styled(Typography)({
   fontSize: "1rem",
@@ -64,39 +59,36 @@ const Text = styled(Box)({
 });
 
 export default function Chat({ user, onClick }) {
-  const { messages, isTyping, userDetails, currentMessage } = useContext(AccountContext);
+  const { messages, isTyping, userDetails, currentMessage} = useContext(AccountContext);
   const other = otherMember(user, userDetails);
+
+
 
   return (
     <Component onClick={onClick}>
-      <Image src={`data:image/svg+xml;base64,${other.picture}`} alt={other?.name} />
+      <Image src={`data:image/svg+xml;base64,${other.picture}`} alt={other.name} />
+      
       <MessageContainer>
-        <Box style={{ display: 'flex', alignItems: 'center' }}>
-          <Name>{other.name}</Name>
-          {/* <Time>{format(user.messages.createdAt)}</Time> */}
-          {messages && messages.timestamp && (
-            <Time>{format(user.messages.timestamp)}</Time>
-          )}
-        </Box>
-        <MessageText>
-          {currentMessage !== undefined && currentMessage.messageId !== undefined && currentMessage.messageId._id === user._id ? (
-            <>
-              {currentMessage.text} {format(currentMessage.createdAt)}
-            </>
-          ) :(
-            user && user.messages ? (
-              <Box style={{ display: 'flex', justifyContent: "space-between", overflow: 'hidden' }}>
-                <Text> {user.messages.type === 'text' ? <>
-                  {user.messages.text.length > 50 ? `${user.messages.text.slice(0, 50)}...` : user.messages.text}
-                </> : 'media'}</Text>
-                
-              </Box>
-            ): (
-              <></>
-            )
-          )}
+        <MessageText style={{ display: 'flex', alignItems: 'center' }}>
+        <Name>{other.name}</Name>
+        {!isTyping ? (
+    currentMessage ? 
+    <Time>{format(currentMessage.createdAt)}</Time> :
+    (user.messages && user.messages.createdAt && <Time>{format(user.messages.createdAt)}</Time>)
+) : null}
         </MessageText>
-        {isTyping && <Typography variant="body2">Someone is typing...</Typography>}
+        {!isTyping?
+        <MessageText>
+          {currentMessage?.messageId && currentMessage.messageId._id === user._id ? (
+            <Box>{currentMessage.type==="text"?<>{currentMessage.text}</>:'media'}</Box>
+          ) : user && user.messages ? (
+            <MessageText style={{ display: 'flex', justifyContent: "space-between" }}>
+              <Text>{user.messages.type === 'text' ? user.messages.text : 'media'}</Text>
+              {/* <Time>{format(user.messages.timestamp)}</Time> */}
+            </MessageText>
+          ) : null}
+        </MessageText>:
+        <Typography variant="body2">Someone is typing...</Typography>}
       </MessageContainer>
     </Component>
   );
