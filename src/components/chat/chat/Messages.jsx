@@ -219,7 +219,7 @@ export default function Messages() {
         const response = await newMessages(message);
         setCurrentMessage(response?.message);
         if (response) {
-          socket.emit("new message", response?.message);
+          socket?.emit("new message",response?.message);
           setMessages((prevMessages) => [...prevMessages, response?.message]);
         } else {
           console.log("failed");
