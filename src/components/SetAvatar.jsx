@@ -42,6 +42,7 @@ const AvatarSelector = ({ onSelect }) => {
     }
     try {
       const result = await Addpic({ id: userDetails._id, picture: selectedAvatar });
+      console.log(result.user,'result');
       setUserDetails(result.user);
       navigate('/');
     } catch (error) {

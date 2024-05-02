@@ -167,7 +167,7 @@ export const addMembers=async(data)=>{
 export const Addpic=async(data)=>{
   console.log(data);
   try {
-    const response=await axios.delete('https://wechatbackend-qlpp.onrender.com/api/users',data);
+    const response=await axios.patch('https://wechatbackend-qlpp.onrender.com/api/users',data);
     console.log(response);
     return response.data;
     
