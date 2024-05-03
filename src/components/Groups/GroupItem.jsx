@@ -11,6 +11,9 @@ const Sender = styled(Box)({
 
 export default function GroupItem({ group, onClick }) {
   const [user, setUser] = useState(null);
+
+
+  
   const { currentMessage, notification, userDetails } = useContext(AccountContext);
   const [groupedNotifications, setGroupedNotifications] = useState({});
   const notificationCount = groupedNotifications[group._id]?.length || 0;
@@ -52,7 +55,7 @@ console.log(group.messages);
 
       {notificationCount > 0 && (
         <Badge badgeContent={notificationCount} color="secondary">
-          <Typography>Notifications</Typography>
+          <Typography></Typography>
         </Badge>
       )}
     </Box>
@@ -75,9 +78,9 @@ console.log(group.messages);
       {groupedNotifications[group._id]?.length > 0 ? (
         <Box style={{ display: 'flex', flexDirection: 'space-between' }}>
           <Typography>
-            <Sender>
+           
               {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId._id === userDetails._id ? "You" : groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].senderId.name}
-            </Sender>-
+            -
             {groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1]?.text}
           </Typography>
           {format(groupedNotifications[group._id][groupedNotifications[group._id]?.length - 1].createdAt)}

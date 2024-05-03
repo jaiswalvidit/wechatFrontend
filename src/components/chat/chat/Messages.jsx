@@ -268,7 +268,7 @@ export default function Messages() {
     }
 
     let timer;
-    const delay = 3000;
+    const delay = 6000;
 
     clearTimeout(timer);
     timer = setTimeout(() => {

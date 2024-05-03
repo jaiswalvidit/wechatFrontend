@@ -189,3 +189,18 @@ export const deleteMessage = async (messageId) => {
     throw error;
   }
 };
+
+export const updateGroup = async (messageId) => {
+  console.log('Deleting message with ID:', messageId);
+  try {
+    const response = await axios.delete('https://wechatbackend-qlpp.onrender.com/api/message/delete', {
+      data: { messageId }
+    });
+    console.log('Response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error while deleting message:', error);
+    throw error;
+  }
+};
+
